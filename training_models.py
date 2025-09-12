@@ -2,19 +2,14 @@ import torch
 import numpy as np
 import os
 
-from training_evaluation.train_veri_model_verireid import train_veri_model_verireid
-from utils.model_utils.losses import ContrastiveLossVeriReId
-
 from utils import image_utils, model_utils
 
-from dataset_preloader import VeriImageDataset, VeriReIdImageDatasetCouples
+from dataset_preloader import VeriImageDataset
 
-from veri_models import ObjectVeriSiamese, VeriReIdNetSiamese
+from veri_models import ObjectVeriSiamese
 
 from training_evaluation import (
     train_veri_model,
-    train_veri_model_verireid,
-    ttrain_and_eval_veri_model,
 )
 
 
@@ -25,7 +20,7 @@ from dataset_annotation_preparation import (
 from torch.utils.data import DataLoader
 import torch.optim as optim
 
-from configs import train_strat_config, build_train_config, get_config
+from configs import train_strat_config, get_config
 
 data_preparation_fc = {
     "general": prepare_annotation,
@@ -145,7 +140,7 @@ Training New
 """
 
 config_train = {
-    "transform_train": "transform_data_aug_luminosity_v2",
+    "transform_train": "transform_data_aug",
 }
 config = build_train_config(config_train, "test_last_model")
 

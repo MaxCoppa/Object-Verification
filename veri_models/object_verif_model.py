@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, Dataset
 
 # Definition of the Siamese Network model
 class ObjectVeriSiamese(nn.Module):
-    def __init__(self, backbone="resnet50", freeze_backbone=True, fc_layer=True):
+    def __init__(self, backbone="resnet50", freeze_backbone=True):
         super(ObjectVeriSiamese, self).__init__()
 
         dict_backbone = {
@@ -70,12 +70,9 @@ class ObjectVeriSiamese(nn.Module):
             for param in self.backbone.parameters():
                 param.requires_grad = False
 
-        # Add a new Fully Connected layer for classification
+        # Add a new Fully Connected layer for classification. Here we can modify
         self.fc = nn.Sequential(
-            nn.Linear(dict_backbone[backbone]["outuput_shape"], 512),
-            nn.BatchNorm1d(512),
-            nn.ReLU(),
-            nn.Linear(512, 128),
+            nn.Linear(dict_backbone[backbone]["outuput_shape"], 128),
             nn.ReLU(),
         )
 
@@ -83,15 +80,11 @@ class ObjectVeriSiamese(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.backbone.to(self.device)
         self.fc.to(self.device)
-        self.fc_layer = fc_layer
 
     def forward_once(self, image):
         features = self.backbone(image).squeeze()
         if features.ndim == 1:
             features = features.unsqueeze(0)
-
-        if not self.fc_layer:
-            return features
 
         output = self.fc(features)
 

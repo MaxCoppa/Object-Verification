@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, Dataset
 
 # Definition of the Siamese Network model
 class ObjectVeriSiameseMC(nn.Module):
-    def __init__(self, backbone="resnet50", freeze_backbone=True, fc_layer=True):
+    def __init__(self, backbone="resnet50", freeze_backbone=True):
         super(ObjectVeriSiameseMC, self).__init__()
 
         dict_backbone = {
@@ -40,12 +40,7 @@ class ObjectVeriSiameseMC(nn.Module):
             self.backbone = model
 
         if backbone in [
-            "mobilenet_v2",
-            "mobilenet_v3_small",
-            "mobilenet_v3_large",
             "efficientnet_v2_s",
-            "efficientnet_v2_m",
-            "efficientnet_v2_l",
         ]:
             model.classifier = torch.nn.Identity()
             self.backbone = model
@@ -60,10 +55,7 @@ class ObjectVeriSiameseMC(nn.Module):
 
         # Add a new Fully Connected layer for classification
         self.fc = nn.Sequential(
-            nn.Linear(dict_backbone[backbone]["outuput_shape"], 512),
-            nn.BatchNorm1d(512),
-            nn.ReLU(),
-            nn.Linear(512, 128),
+            nn.Linear(dict_backbone[backbone]["outuput_shape"], 128),
             nn.ReLU(),
         )
 
@@ -71,16 +63,12 @@ class ObjectVeriSiameseMC(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.backbone.to(self.device)
         self.fc.to(self.device)
-        self.fc_layer = fc_layer
 
     def forward_once(self, image):
         features = self.backbone(image).squeeze()
 
         if features.ndim == 1:
             features = features.unsqueeze(0)
-
-        if not self.fc_layer:
-            return features
 
         output = self.fc(features)
 
