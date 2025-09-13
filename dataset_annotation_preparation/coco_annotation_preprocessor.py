@@ -31,7 +31,6 @@ def prepare_coco_annotation(
     Returns:
         pd.DataFrame: Final annotated and paired dataset.
     """
-    check_pairing_type(pairing_type)
     with open(raw_annotation_path, "r", encoding="utf-8") as file:
         train_data = json.load(file)
 
@@ -65,19 +64,7 @@ def prepare_coco_annotation(
     return df_processed
 
 
-def check_pairing_type(pairing_type: str):
-    """
-    Raises an error if pairing_type is not valid.
-    """
-    valid_types = {"test", "couples"}
-
-    if pairing_type not in valid_types:
-        raise ValueError(
-            f'Invalid pairing_type "{pairing_type}" for Coco. Choose from {", ".join(valid_types)}.'
-        )
-
-
-def prepare_df_annotations(annotations):
+def prepare_df_annotations(annotations) -> pd.DataFrame:
     df_annotations = pd.DataFrame(annotations)
 
     # Keep only a specified category
@@ -100,7 +87,7 @@ def prepare_df_annotations(annotations):
     return df_annotations
 
 
-def prepare_df_images(images):
+def prepare_df_images(images) -> pd.DataFrame:
 
     df_images = pd.DataFrame(images)
     df_images = df_images.rename(columns={"id": "image_id"})
@@ -133,7 +120,7 @@ def prepare_df_images(images):
     return df_images
 
 
-def create_path(df, data_directory):
+def create_path(df: pd.DataFrame, data_directory: str) -> pd.DataFrame:
 
     df["file_name"] = df["file_name"].apply(
         lambda path: os.path.join(data_directory, path)
@@ -142,14 +129,16 @@ def create_path(df, data_directory):
     return df
 
 
-def validate_correct_img_path(df):
+def validate_correct_img_path(df: pd.DataFrame) -> pd.DataFrame:
 
     mask_dir = df["file_name"].apply(os.path.exists)
     df = df[mask_dir].reset_index(drop=True)
     return df
 
 
-def filter_by_area_scale(df: pd.DataFrame, lower_quantile=0.85, upper_quantile=0.995):
+def filter_by_area_scale(
+    df: pd.DataFrame, lower_quantile=0.85, upper_quantile=0.995
+) -> pd.DataFrame:
     """
     Filters a DataFrame based on the relative size (area scale) of objects in images.
 
@@ -170,7 +159,7 @@ def filter_by_area_scale(df: pd.DataFrame, lower_quantile=0.85, upper_quantile=0
     return filtered_df.reset_index(drop=True).drop(columns="area_scale")
 
 
-def remove_least_frequent_views(df: pd.DataFrame, n: int = 5):
+def remove_least_frequent_views(df: pd.DataFrame, n: int = 5) -> pd.DataFrame:
     """
     Removes the 'n' least frequent views based on the number of associated image files.
     """
@@ -188,7 +177,7 @@ def remove_least_frequent_views(df: pd.DataFrame, n: int = 5):
     return filtered_df
 
 
-def clean_bad_images(df: pd.DataFrame, error_data_path: str):
+def clean_bad_images(df: pd.DataFrame, error_data_path: str) -> pd.DataFrame:
     if not error_data_path:
         return df
 
@@ -210,7 +199,9 @@ def clean_bad_images(df: pd.DataFrame, error_data_path: str):
     return df
 
 
-def create_couples(df_images_annotated, n_error=1, n_augmentation=1):
+def create_couples(
+    df_images_annotated: pd.DataFrame, n_error: int = 1, n_augmentation: int = 1
+) -> pd.DataFrame:
     df_copy = df_images_annotated[["file_name", "bbox", "view_id"]].copy()
     df_copy = df_copy.rename(
         columns={
@@ -257,7 +248,13 @@ def create_couples(df_images_annotated, n_error=1, n_augmentation=1):
     return pd.concat(list_concat).sample(frac=1).reset_index(drop=True)
 
 
-def apply_pairing_strategy(df, pairing_type, train_ratio, n_error=1, n_augmentation=1):
+def apply_pairing_strategy(
+    df: pd.DataFrame,
+    pairing_type: str,
+    train_ratio: float,
+    n_error: int = 1,
+    n_augmentation: int = 1,
+) -> pd.DataFrame:
     """
     Applies the correct pairing strategy based on the pairing_type.
     """
@@ -272,7 +269,7 @@ def apply_pairing_strategy(df, pairing_type, train_ratio, n_error=1, n_augmentat
     return strategies[pairing_type](df)
 
 
-def assign_train_column(df, train_ratio):
+def assign_train_column(df: pd.DataFrame, train_ratio: float) -> pd.DataFrame:
     """
     Assign 1 for training and 0 for Testing
     """
@@ -284,7 +281,7 @@ def assign_train_column(df, train_ratio):
     return df
 
 
-def verif_couples(df_annotation):
+def verif_couples(df_annotation: pd.DataFrame) -> pd.DataFrame:
 
     mask_error = df_annotation["label"] == 0
     mask_same_object = (
@@ -295,7 +292,7 @@ def verif_couples(df_annotation):
     return df_annotation[~mask].reset_index(drop=True)
 
 
-def make_id_object(df):
+def make_id_object(df: pd.DataFrame) -> pd.DataFrame:
 
     for col_type in ["img_", "couple_"]:
         df[col_type + "object_id"] = (

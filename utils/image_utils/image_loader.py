@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import cv2
-import l_opencv
 import torch
 from torchvision.io import read_image
 

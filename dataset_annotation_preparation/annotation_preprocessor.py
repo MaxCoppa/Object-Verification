@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import random
+from typing import Tuple
 
 
 def prepare_annotation(
@@ -28,9 +29,8 @@ def prepare_annotation(
     Returns:
         pd.DataFrame: Processed annotations.
     """
-    check_pairing_type(pairing_type)
 
-    df_annotation = pd.read_csv(raw_annotation_path, sep=";")
+    df_annotation = pd.read_csv(raw_annotation_path)
 
     df_processed = (
         df_annotation.pipe(process_object_info, image_directory=images_dir)
@@ -51,19 +51,7 @@ def prepare_annotation(
     return df_processed
 
 
-def check_pairing_type(pairing_type: str):
-    """
-    Raises an error if pairing_type is not valid.
-    """
-    valid_types = {"triplets", "test", "couples"}
-
-    if pairing_type not in valid_types:
-        raise ValueError(
-            f'Invalid pairing_type "{pairing_type}". Choose from {", ".join(valid_types)}.'
-        )
-
-
-def process_object_info(df, image_directory):
+def process_object_info(df: pd.DataFrame, image_directory: str) -> pd.DataFrame:
 
     df_object_info = df.copy()
     df_object_info[["id", "image"]] = df_object_info["id/image"].str.split(
@@ -80,7 +68,7 @@ def process_object_info(df, image_directory):
     return df_object_info
 
 
-def group_images_by_id(df_object_info):
+def group_images_by_id(df_object_info: pd.DataFrame) -> pd.DataFrame:
     """
     Groups images by 'id_unique' and filters groups with more than one image.
     """
@@ -93,7 +81,9 @@ def group_images_by_id(df_object_info):
     return df_grouped
 
 
-def create_image_pairs(df_grouped, n_augmentation=1):
+def create_image_pairs(
+    df_grouped: pd.DataFrame, n_augmentation: int = 1
+) -> pd.DataFrame:
     """
     Creates consecutive pairs of shuffled image paths and structures the DataFrame.
     """
@@ -120,7 +110,7 @@ def create_image_pairs(df_grouped, n_augmentation=1):
     return df_couples.drop(columns=["couples", "img_list"])
 
 
-def validate_correct_img_path(df):
+def validate_correct_img_path(df: pd.DataFrame) -> pd.DataFrame:
 
     mask_dir = (df["img_path"].apply(os.path.exists)) & (
         df["couple_path"].apply(os.path.exists)
@@ -131,7 +121,9 @@ def validate_correct_img_path(df):
     return df
 
 
-def filter_objects_by_camera_proportion(df):
+def filter_objects_by_camera_proportion(
+    df: pd.DataFrame,
+) -> Tuple[pd.DataFrame, pd.Index]:
     """
     Filters the objects based on the proportion of each Camera ID in the dataset.
     """
@@ -152,7 +144,7 @@ def filter_objects_by_camera_proportion(df):
     return filtered_df, valid_cameras
 
 
-def create_couples(df, n_error=5):
+def create_couples(df: pd.DataFrame, n_error: int = 5) -> pd.DataFrame:
     """
     Creates a new dataset by modifying and shuffling specific "couple" columns.
     """
@@ -204,7 +196,7 @@ def create_couples(df, n_error=5):
     return pd.concat(list_concat).sample(frac=1).reset_index(drop=True)
 
 
-def create_triplets(df):
+def create_triplets(df: pd.DataFrame) -> pd.DataFrame:
     """
     Creates a new dataset by modifying and shuffling specific "couple" columns.
     """
@@ -233,7 +225,9 @@ def create_triplets(df):
     return pd.concat(list_concat).sample(frac=1).reset_index(drop=True)
 
 
-def apply_pairing_strategy(df, pairing_type, train_ratio, n_error=1):
+def apply_pairing_strategy(
+    df: pd.DataFrame, pairing_type: str, train_ratio: float, n_error: int = 1
+) -> pd.DataFrame:
     """
     Applies the correct pairing strategy based on the pairing_type.
     """
@@ -251,7 +245,7 @@ def apply_pairing_strategy(df, pairing_type, train_ratio, n_error=1):
     return strategies[pairing_type](df)
 
 
-def assign_train_column(df, train_ratio):
+def assign_train_column(df: pd.DataFrame, train_ratio: float) -> pd.DataFrame:
     """
     Assign 1 for training and 0 for Testing
     """
@@ -263,7 +257,7 @@ def assign_train_column(df, train_ratio):
     return df
 
 
-def verif_couples(df_annotation, pairing_type):
+def verif_couples(df_annotation: pd.DataFrame, pairing_type: str) -> pd.DataFrame:
     def extract_id(filepath):
         # Handles NaNs or missing paths safely
         if not isinstance(filepath, str):

@@ -1,55 +1,47 @@
 # %% Import necessary libraries
 import time
-import torch
-from tqdm import tqdm
 from torch.utils.data import DataLoader
 
-from dataset_annotation_preparation import prepare_dataset
+from dataset_annotation_preparation import prepare_annotation
 from dataset_preloader import (
     VeriImageDataset,
 )
 
-from utils import config_utils, image_utils
-from configs import build_config
+from utils import image_utils
+
+# %%
+ANNOTATIONS_PATH = (
+    "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/annotations/"
+)
+DATA_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/"
+PROJECT_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification"
 
 # %% Define parameters
-preparation_type = "general"
-file_type = "jpg"
 crop_type = None
-pairing_type = "couples"
+train_ratio = 0.5
+n_error = 2
+n_augmentation = 2
 
-train_ratio = 0.8
-n_error = 1
-n_augmentation = 1
+load = True
+transform_type = "test"
 
-load = False
-transform_type = "x"
-
-annotation_filename = "test.csv"
-
-# %% Build the configuration for the data annotation preparation
-
-data_configs = build_config(
-    config_type=preparation_type,
-    train=None,
-    file_type=file_type,
-    crop_type=crop_type,
-    n_augmentation=n_augmentation,
-    n_error=n_error,
-    pairing_type=pairing_type,
-    train_ratio=train_ratio,
-    annotation_filename=annotation_filename,
+annotation_filename = "preprocessed_annotations_sharks.csv"
+raw_annotation_sharks = ANNOTATIONS_PATH + "raw_annotations_sharks.csv"
+preprocessed_annotation_sharks = (
+    ANNOTATIONS_PATH + "preprocessed_annotations_sharks.csv"
 )
-
-config_preparation_annot = data_configs["preparation"]
-config_data_loader = data_configs["data"]
-
+images_dir = DATA_PATH + "animals"
 
 # %% Test Data Annotation
 start = time.time()
-df = prepare_dataset(
-    dataset_name=preparation_type,
-    **config_preparation_annot,
+
+df = prepare_annotation(
+    raw_annotation_path=raw_annotation_sharks,
+    images_dir=images_dir,
+    preprocessed_annotation_path=preprocessed_annotation_sharks,
+    train_ratio=train_ratio,
+    n_augmentation=n_augmentation,
+    n_error=n_error,
 )
 
 print(f"Annotation preparation time: {time.time() - start:.4f} seconds")
@@ -61,29 +53,23 @@ print(
     f"Positive Pairs : {df['label'].sum()}, Negative Pairs : {(1 - df['label']).sum()}"
 )
 
-
-# %% Test data Loading
-
-# # %% Visualize sample images from the training dataset
-
-# start = time.time()
-# test_data.visualize_images(n=10)
-# print(f"Image visualization time: {time.time() - start:.4f} seconds")
+# %% Visualize sample images from the training dataset
+transform_default = image_utils.transform_fc(transform_type)
 
 if load:
 
-    transform_default = image_utils.transform_fc(transform_type)
-
     training_data = VeriImageDataset(
+        annotations_file=preprocessed_annotation_sharks,
         train=True,
         transform=transform_default,
-        **config_data_loader,
+        crop_type=None,
     )
 
     test_data = VeriImageDataset(
+        annotations_file=preprocessed_annotation_sharks,
         train=False,
         transform=transform_default,
-        **config_data_loader,
+        crop_type=None,
     )
 
     start_time = time.time()
@@ -91,16 +77,25 @@ if load:
     data = training_data + test_data
 
     dataloader = DataLoader(
-        data, batch_size=128, shuffle=True, num_workers=8, pin_memory=True
-    )
+        data, batch_size=2, shuffle=True, num_workers=0, pin_memory=True
+    )  # No multiprocessing here MacOS issue
 
-    for batch in tqdm(dataloader, desc="Batches preprocessed"):
+    k = 0
+    for batch in dataloader:
 
+        k += 1
+        print("batch: " + str(k))
         pass
 
     end_time = time.time()
 
     elapsed_time = end_time - start_time
     print(f"Loading all the Data in : {elapsed_time:.4f} secondes")
+
+# %%
+
+start = time.time()
+test_data.visualize_images(n=2)
+print(f"Image visualization time: {time.time() - start:.4f} seconds")
 
 # %%

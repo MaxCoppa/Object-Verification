@@ -122,6 +122,6 @@ def transform_fc(transform_type):
             f"Unknown transformation: '{transform_type}'. "
             f"Available transformations are: {available}"
         )
-    transform = transform_dict.get(transform_type, transform_dict["vi"])
+    transform = transform_dict.get(transform_type, transform_dict["test"])
 
     return transform

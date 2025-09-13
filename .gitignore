@@ -15,7 +15,7 @@ __pycache__/
 *.pyc
 
 # Ignore all CSV files
-*.csv
+# *.csv
 
 .ipynb_checkpoints/
 
