@@ -13,9 +13,7 @@ class ImagePreprocessor:
         img_annotations (pd.DataFrame): Parsed annotation data from CSV.
         file_type (str): Image file extension (e.g., 'png', 'jpg').
         crop_type (str): Type of object to crop ('object', 'person', etc.).
-        anonymize_plate (bool): Whether to anonymize license plates in images.
         transform (callable): Transformations to apply to the images.
-        algo_pair (str): Image processing algorithm combination identifier.
         object_dir (str): Path to object data, if any.
         data_dir (str): Path to image data.
         device (str): Device to run the model on ('cpu' or 'cuda').
@@ -30,17 +28,13 @@ class ImagePreprocessor:
         data_dir=None,
         file_type="png",
         crop_type="object",
-        anonymize_plate=False,
-        algo_pair="NoBayer:GrabEq",
         device="cpu",
         model=None,
     ):
         self.img_annotations = pd.read_csv(raw_annotation_path)
         self.file_type = file_type
         self.crop_type = crop_type
-        self.anonymize_plate = anonymize_plate
         self.transform = transform
-        self.algo_pair = algo_pair
 
         self.object_dir = object_dir
         self.data_dir = data_dir

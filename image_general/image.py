@@ -26,22 +26,10 @@ class Image:
         self.row_img = row_img.copy()
         self.img = None
         self.col_type = col_type
-        self.process_row()
-
-    def process_row(self):
-        path = image_utils.create_image_path(
-            row_img=self.row_img,
-            file_type=self.preprocessor.file_type,
-            col_type=self.col_type,
-        )
-        if not image_utils.validate_correct_img_path(path):
-            raise FileNotFoundError(f"Image not found at path: {path}")
-        self.row_img[self.col_type + "path"] = path
 
     def load_img(self):
         self.img = image_utils.load_image_file_generic(
             self.row_img[self.col_type + "path"],
-            algo_pair=self.preprocessor.algo_pair,
             file_type=self.preprocessor.file_type,
             crop=self.row_img.get(self.col_type + "crop"),
         )
@@ -57,20 +45,7 @@ class Image:
 
     def transform_img_visualise(self):
 
-        self.img_visualise = image_utils.transform_fc("same")(self.img)
-
-        if self.preprocessor.anonymize_plate & (
-            (self.preprocessor.file_type == "png")
-            | (self.preprocessor.file_type == "plate")
-        ):
-            if self.preprocessor.crop_type:
-                crop_params = ""
-            else:
-                crop_params = ""
-            self.img_visualise = image_utils.anonymise_image(
-                self.img_visualise, crop_params
-            )
-
+        self.img_visualise = image_utils.transform_fc("visualise")(self.img)
         self.img_visualise = image_utils.process_image_plt(self.img_visualise)
         return self.img_visualise
 
@@ -79,21 +54,17 @@ class Image:
 
         plt.imshow(self.img_visualise, cmap="gray")
         plt.axis("off")
-        plt.title(self.plate)
+        plt.title(self.id)
         plt.show()
 
     # -------- Metadata Accessors -------- #
-    @property
-    def plate(self):
-        return self.row_img.get(self.col_type + "plate")
-
     @property
     def path(self):
         return self.row_img.get(self.col_type + "path")
 
     @property
-    def uid(self):
-        return self.row_img.get(self.col_type + "UID")
+    def id(self):
+        return self.row_img.get(self.col_type + "id")
 
     @property
     def tsp(self):
@@ -102,7 +73,3 @@ class Image:
     @property
     def folder(self):
         return self.row_img.get(self.col_type + "folder")
-
-    @property
-    def hour(self):
-        return pd.to_datetime(self.row_img[self.col_type + "tsp"], format="mixed").hour

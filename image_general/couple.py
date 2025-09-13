@@ -44,7 +44,6 @@ class CoupleImage:
         Performs a model prediction using the transformed image pair.
         """
         self.prepare()
-
         input1 = self.img1.img_transform.unsqueeze(0).to(self.preprocessor.device)
         input2 = self.img2.img_transform.unsqueeze(0).to(self.preprocessor.device)
 
@@ -80,4 +79,4 @@ class CoupleImage:
 
     @property
     def label(self):
-        return int(self.img1.plate == self.img2.plate)
+        return int(self.img1.id == self.img2.id)

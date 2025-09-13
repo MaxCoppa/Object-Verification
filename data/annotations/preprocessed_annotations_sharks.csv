@@ -1,9 +1,7 @@
 img_path,img_camera_id,couple_path,couple_camera_id,label,train,img_object_id,couple_object_id
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,0,0,shark2,shark1
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,0,0,shark1,shark2
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_1.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,1,1,shark1,shark1
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,0,1,shark2,shark1
+/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,0,1,shark1,shark2
+/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,1,0,shark2,shark2
+/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_1.jpg,1,0,1,shark2,shark1
+/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,1,0,shark2,shark2
 /Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_1.jpg,1,1,1,shark1,shark1
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,1,1,shark2,shark2
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,1,1,shark2,shark2
-/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark2/shark2_1.jpg,1,0,1,shark1,shark2
+/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_2.jpg,1,/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/animals/shark1/shark1_1.jpg,1,1,1,shark1,shark1

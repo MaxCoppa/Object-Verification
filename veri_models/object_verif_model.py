@@ -23,7 +23,7 @@ class ObjectVeriSiamese(nn.Module):
             },
             "resnet50": {
                 "model": models.resnet50(),
-                "weights_path": "/veri_models/backbone/resnet50-11ad3fa6.pth",
+                "weights_path": "veri_models/backbone/resnet50-11ad3fa6.pth",
                 "outuput_shape": 2048,
             },
             "vit16": {
@@ -52,12 +52,7 @@ class ObjectVeriSiamese(nn.Module):
             self.backbone = model
 
         if backbone in [
-            "mobilenet_v2",
-            "mobilenet_v3_small",
-            "mobilenet_v3_large",
             "efficientnet_v2_s",
-            "efficientnet_v2_m",
-            "efficientnet_v2_l",
         ]:
             model.classifier = torch.nn.Identity()
             self.backbone = model

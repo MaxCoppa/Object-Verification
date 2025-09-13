@@ -80,7 +80,7 @@ preprocessor = ImagePreprocessor(
 )
 
 img_builder = ImageFactory(preprocessor)
-plates_all = preprocessor.img_annotations["plate"].unique()
+ids_all = preprocessor.img_annotations["id"].unique()
 n = 100
 total_img_time = 0.0
 total_torch_time = 0.0
@@ -90,10 +90,10 @@ for i in range(n):
     if i % 100 == 0:
         print(f"{i}/{n}")
     label = rd.randint(0, 1)
-    example = rd.choice(plates_all)
-    error = rd.choice(plates_all)
-    rows_example = preprocessor.get_rows_img([example], "plate")
-    rows_error = preprocessor.get_rows_img([error], "plate")
+    example = rd.choice(ids_all)
+    error = rd.choice(ids_all)
+    rows_example = preprocessor.get_rows_img([example], "id")
+    rows_error = preprocessor.get_rows_img([error], "id")
 
     img_start = time.time()
     if label:

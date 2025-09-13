@@ -59,7 +59,7 @@ def crop_image(image, crop_params):
 
 def anonymise_image(image, crop_params):
     """
-    Anonymize a objects based on the plate parameters.
+    Anonymize a objects based on crop parameters.
     """
     if isinstance(crop_params, str):
         top, left, height, width = map(
