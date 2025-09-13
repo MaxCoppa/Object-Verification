@@ -287,11 +287,11 @@ def assign_train_column(df, train_ratio):
 def verif_couples(df_annotation):
 
     mask_error = df_annotation["label"] == 0
-    mask_same_car = (
+    mask_same_object = (
         df_annotation["img_object_id"] == df_annotation["couple_object_id"]
     )
 
-    mask = mask_error & mask_same_car
+    mask = mask_error & mask_same_object
     return df_annotation[~mask].reset_index(drop=True)
 
 

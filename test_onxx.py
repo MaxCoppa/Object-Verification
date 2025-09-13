@@ -65,7 +65,7 @@ print(
 # %%
 
 file_type = "png"
-crop_type = "car"
+crop_type = "object"
 device = "cpu"
 
 transform_default = image_utils.transform_fc("test")

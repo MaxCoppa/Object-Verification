@@ -10,5 +10,5 @@ test_default = {
 
 
 test_config = {
-    "general": build_config("", file_type="png", crop_type="car", **test_default),
+    "general": build_config("", file_type="png", crop_type="object", **test_default),
 }

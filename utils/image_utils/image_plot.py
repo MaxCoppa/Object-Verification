@@ -15,7 +15,7 @@ def visualise_images_df(
     df,
     n_images=20,
     file_type="png",
-    crop_type="car",
+    crop_type="object",
     debug=True,
     transform_type="visualise",
 ):
@@ -45,7 +45,7 @@ def visualise_images_df(
 def preprocessed_images(
     row,
     file_type="png",
-    crop_type="car",
+    crop_type="object",
     transform_type="visualise",
 ):
     """

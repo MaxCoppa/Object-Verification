@@ -12,15 +12,13 @@ from image_general import ImagePreprocessor, ImageFactory
 # %%
 
 file_type = "png"
-crop_type = "car"
+crop_type = "object"
 device = "cuda"
 
 
 transform_default = image_utils.transform_fc("test")
 
-best_model_path = (
-    "pretrained_model/object_verif_eval.pt"
-)
+best_model_path = "pretrained_model/object_verif_eval.pt"
 model = torch.load(best_model_path, weights_only=False)
 # %%
 preprocessor = ImagePreprocessor(

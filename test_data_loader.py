@@ -27,7 +27,7 @@ test_data_loader_configs = get_config("test_data_loader_config")
 # %% Define parameters
 preparation_type = "general"
 file_type = "jpg"
-crop_type = "car"
+crop_type = "object"
 pairing_type = "test"
 
 train_ratio = 0

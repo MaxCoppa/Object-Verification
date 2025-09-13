@@ -19,7 +19,6 @@ class VeriImageDatasetTest(Dataset):
 
     Args:
         annotations_file (str): Path to the CSV file with image paths and labels.
-        correct_pair_ratio (float): Ratio of positive (same object) to negative (different objects) pairs.
         img_dir (str): Optional directory where images are stored.
         transform (callable): Torchvision transform(s) to apply to the images.
         file_type (str): Type of image file (e.g., "jpg", "png").
@@ -29,7 +28,6 @@ class VeriImageDatasetTest(Dataset):
     def __init__(
         self,
         annotations_file,
-        correct_pair_ratio: int = 0.5,
         img_dir=None,
         transform=None,
         file_type="jpg",
@@ -41,7 +39,6 @@ class VeriImageDatasetTest(Dataset):
 
         self.transform = transform
 
-        self.correct_pair_ratio = correct_pair_ratio
         self.file_type = file_type
         self.crop_type = crop_type
 
@@ -62,7 +59,7 @@ class VeriImageDatasetTest(Dataset):
         if self.transform:
             image = self.transform(image)
             couple = self.transform(couple)
-            # couple = v2.RandomHorizontalFlip(p=1)(self.transform(couple))
+
         return image, couple, label, image_path, couple_path
 
     def img_loader(self, row, col):
@@ -77,7 +74,7 @@ class VeriImageDatasetTest(Dataset):
 
         dict_load = {
             "png": lambda path: load_and_process_image(
-                path, self.algo, self.color_process
+                path,
             ),
             "default": lambda path: read_image(path),
         }

@@ -12,7 +12,7 @@ class ImagePreprocessor:
     Attributes:
         img_annotations (pd.DataFrame): Parsed annotation data from CSV.
         file_type (str): Image file extension (e.g., 'png', 'jpg').
-        crop_type (str): Type of object to crop ('car', 'person', etc.).
+        crop_type (str): Type of object to crop ('object', 'person', etc.).
         anonymize_plate (bool): Whether to anonymize license plates in images.
         transform (callable): Transformations to apply to the images.
         algo_pair (str): Image processing algorithm combination identifier.
@@ -29,7 +29,7 @@ class ImagePreprocessor:
         object_dir=None,
         data_dir=None,
         file_type="png",
-        crop_type="car",
+        crop_type="object",
         anonymize_plate=False,
         algo_pair="NoBayer:GrabEq",
         device="cpu",

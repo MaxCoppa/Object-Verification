@@ -9,6 +9,6 @@ dataset_default = {
 
 dataset_config = {
     "general": build_config(
-        "general", file_type="png", crop_type="car", **dataset_default
+        "general", file_type="png", crop_type="object", **dataset_default
     ),
 }

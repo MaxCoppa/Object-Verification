@@ -75,8 +75,8 @@ def train_veri_model(
                         fpr_percentage = metrics["FPR"] * 100
                         target_fnr_percentage = metrics["FNR"] * 100
 
-                        logger.info(f"Taux FR Cible: {target_fnr_percentage:.2f}%")
-                        logger.info(f"Taux FA Correspondant: {fpr_percentage:.2f}%")
+                        logger.info(f"Target FNR: {target_fnr_percentage:.2f}%")
+                        logger.info(f"Corresponding FPR: {fpr_percentage:.2f}%")
 
                         logger.info(f"  Threshold: {threshold:.2f}")
                     # Append AUC to history

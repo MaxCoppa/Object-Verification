@@ -3,8 +3,6 @@ import torch
 import numpy as np
 import os
 
-from training_evaluation.train_veri_model_verireid import train_veri_model_verireid
-
 from utils import image_utils, model_utils
 
 

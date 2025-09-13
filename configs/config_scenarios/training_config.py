@@ -10,6 +10,10 @@ train_default = {
 
 training_config = {
     "": build_config(
-        "general", file_type="png", crop_type="car", n_augmentation=2, **train_default
+        "general",
+        file_type="png",
+        crop_type="object",
+        n_augmentation=2,
+        **train_default
     ),
 }

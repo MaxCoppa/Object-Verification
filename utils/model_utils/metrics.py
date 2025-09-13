@@ -80,7 +80,7 @@ def calculate_quartiles_for_classes(y_true, y_scores):
     return quartiles_results
 
 
-def evaluate_FRR(y_true, y_scores, target_fnrs=[0.005, 0.01, 0.05, 0.10, 0.25]):
+def evaluate_FRR(y_true, y_scores, target_fnrs=[0.05]):
     """
     Given the true labels (y_true) and predicted scores (y_scores), this function computes
     the False Positive Rate (FPR) and the thresholds that correspond to specified False Negative Rates (FNR).
@@ -197,8 +197,8 @@ def evaluate_model(y_true, y_pred, y_scores, print_results=False):
             fpr_percentage = metrics["FPR"] * 100  # Convert to percentage
             target_fnr_percentage = metrics["FNR"] * 100  # Convert to percentage
 
-            print(f"Taux FR Cible: {target_fnr_percentage:.2f}%")
-            print(f"Taux FA Correspondant: {fpr_percentage:.2f}%")
+            print(f"Target FNR: {target_fnr_percentage:.2f}%")
+            print(f"Corresponding FPR: {fpr_percentage:.2f}%")
 
             print(f"  Threshold: {threshold:.2f}")
             print()
@@ -209,8 +209,8 @@ def evaluate_model(y_true, y_pred, y_scores, print_results=False):
             target_fpr_percentage = metrics["FPR"] * 100  # Convert to percentage
             fnr_percentage = metrics["FNR"] * 100  # Convert to percentage
 
-            print(f"Taux FA Cible: {target_fpr_percentage:.2f}%")
-            print(f"Taux FR Correspondant: {fnr_percentage:.2f}%")
+            print(f"Target FNR: {target_fnr_percentage:.2f}%")
+            print(f"Corresponding FPR: {fpr_percentage:.2f}%")
 
             print(f"  Threshold: {threshold:.2f}")
             print()

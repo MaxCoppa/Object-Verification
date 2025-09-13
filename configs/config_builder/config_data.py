@@ -8,6 +8,6 @@ data_config = {
             "images_dir": f"{DATA_PATH}/xxx",
             "error_data_path": f"{DATA_PATH}/xxx.csv",
         },
-        "annotation_dir": f"{ANNOTATIONS_PATH}/A15_ELOI",
+        "annotation_dir": f"{ANNOTATIONS_PATH}/xxx",
     },
 }

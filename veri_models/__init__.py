@@ -1,4 +1,9 @@
-__all__ = ["ObjectVeriSiamese", "ModelEnsembler", "ObjectVeriSiameseMC", "ModelEnsemblerMC" ]
+__all__ = [
+    "ObjectVeriSiamese",
+    "ModelEnsembler",
+    "ObjectVeriSiameseMC",
+    "ModelEnsemblerMC",
+]
 
 from .object_verif_model import ObjectVeriSiamese
 from .object_verif_model_pred import ObjectVeriSiameseMC
