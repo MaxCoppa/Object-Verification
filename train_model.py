@@ -19,8 +19,9 @@ from training_evaluation import (
 )
 
 # %%
-ANNOTATIONS_PATH = (
-    "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/annotations/"
+ANNOTATIONS_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/preprocessed_annotations/"
+RAW_ANNOTATIONS_PATH = (
+    "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/raw_annotations/"
 )
 DATA_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/"
 PROJECT_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/"
@@ -35,7 +36,7 @@ load = True
 transform_type = "test"
 
 annotation_filename = "preprocessed_annotations_sharks.csv"
-raw_annotation_sharks = ANNOTATIONS_PATH + "raw_annotations_sharks.csv"
+raw_annotation_sharks = RAW_ANNOTATIONS_PATH + "raw_annotations_sharks.csv"
 preprocessed_annotation_sharks = ANNOTATIONS_PATH + "train_annotations_sharks.csv"
 images_dir = DATA_PATH + "animals"
 

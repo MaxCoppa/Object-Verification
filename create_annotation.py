@@ -9,24 +9,27 @@ from dataset_preloader import (
 
 from utils import image_utils
 
+
 # %%
-ANNOTATIONS_PATH = (
-    "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/annotations/"
+
+ANNOTATIONS_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/preprocessed_annotations/"
+RAW_ANNOTATIONS_PATH = (
+    "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/raw_annotations/"
 )
 DATA_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/"
-PROJECT_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification"
+PROJECT_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/"
 
 # %% Define parameters
 crop_type = None
 train_ratio = 0.5
 n_error = 2
-n_augmentation = 2
+n_augmentation = 5
 
 load = True
 transform_type = "test"
 
 annotation_filename = "preprocessed_annotations_sharks.csv"
-raw_annotation_sharks = ANNOTATIONS_PATH + "raw_annotations_sharks.csv"
+raw_annotation_sharks = RAW_ANNOTATIONS_PATH + "raw_annotations_sharks.csv"
 preprocessed_annotation_sharks = (
     ANNOTATIONS_PATH + "preprocessed_annotations_sharks.csv"
 )
