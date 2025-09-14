@@ -5,12 +5,12 @@ Idea : Crop type : crop ==> if we wnat to crop or not the image / for images COC
 
 To do : 
 - Verify no xml / vehicle / car / radar... 
-- Improve losses + data augmentation : public and private version
 - Change configs too specific only one too much here
-- Test one model two public images ... 
 - Distances / Predictions ==> Private / put smthg more simple public ? 
+- Do ReadME.md 
+- Change the init of the project properly
+- Add a second data base made of birds (to test)
 
-utils/image_utils/image_transforms.py ==> Put only simple data augmentation techniques ==> DOne !
-utils/model_utils ==> drop too precise from what I ve done ==> Done !
-training_evaluation/train_eval.py | training_evaluation/train_veri_model.py==> don't put FR / FA .... ==> Done !
-configs ==> too much information 
+- For the train : do smthg like train on ... test on ... (do I use a configs file or not ?)
+- Check the PATH / Project/ path ... 
+- executable or not ? 

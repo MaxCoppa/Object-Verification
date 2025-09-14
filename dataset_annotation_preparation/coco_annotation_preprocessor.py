@@ -107,9 +107,7 @@ def prepare_df_images(images) -> pd.DataFrame:
     )
 
     columns_drop_images = [
-        "image_origin",
         "location",
-        "acquisition_time",
         "site",
         "config",
         "type",
