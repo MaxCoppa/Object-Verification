@@ -26,6 +26,7 @@ __pycache__/
 *.md
 
 training_models_val_test.py
+training_models_private.py
 image_transforms_private.py
 losses_private.py
 
