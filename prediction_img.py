@@ -11,17 +11,12 @@ from image_general import ImagePreprocessor, ImageFactory
 # %%
 model = ObjectVeriSiamese()
 # %%
-# model
-# %%
 
 file_type = "jpg"
 device = "cpu"
 
 
 transform_default = image_utils.transform_fc("test")
-
-# best_model_path = "pretrained_model/object_verif_eval.pt"
-# model = torch.load(best_model_path, weights_only=False)
 # %%
 preprocessor = ImagePreprocessor(
     raw_annotation_path="/Users/maximecoppa/Desktop/Projects/Object-Verification/data/annotations/demo_annotations_sharks.csv",

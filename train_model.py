@@ -1,54 +1,64 @@
-# %%
+# %% Import necessary libraries
+import time
 import torch
 import numpy as np
 import os
 
+from torch.utils.data import DataLoader
+import torch.optim as optim
+
+from dataset_annotation_preparation import prepare_annotation
+from dataset_preloader import (
+    VeriImageDataset,
+)
+
 from utils import image_utils, model_utils
-
-
-from dataset_preloader import VeriImageDataset
-
 from veri_models import ObjectVeriSiamese
-
 from training_evaluation import (
     train_veri_model,
 )
 
-from dataset_annotation_preparation import (
-    prepare_dataset,
+# %%
+ANNOTATIONS_PATH = (
+    "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/annotations/"
+)
+DATA_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/data/images/"
+PROJECT_PATH = "/Users/maximecoppa/Desktop/Projects/Object-Verification/"
+
+# %% Define parameters
+crop_type = None
+train_ratio = 0.5
+n_error = 2
+n_augmentation = 100
+
+load = True
+transform_type = "test"
+
+annotation_filename = "preprocessed_annotations_sharks.csv"
+raw_annotation_sharks = ANNOTATIONS_PATH + "raw_annotations_sharks.csv"
+preprocessed_annotation_sharks = ANNOTATIONS_PATH + "train_annotations_sharks.csv"
+images_dir = DATA_PATH + "animals"
+
+# %% Test Data Annotation
+df = prepare_annotation(
+    raw_annotation_path=raw_annotation_sharks,
+    images_dir=images_dir,
+    preprocessed_annotation_path=preprocessed_annotation_sharks,
+    train_ratio=train_ratio,
+    n_augmentation=n_augmentation,
+    n_error=n_error,
 )
 
-from torch.utils.data import DataLoader
-import torch.optim as optim
-
-from configs import train_strat_config, build_train_config, get_config
-
-training_config = get_config("training_config")
-val_config = get_config("test_config")
-test_config = get_config("test_config")
-
-dataset_config = get_config("dataset_config")
-
-
-# """
-# Training Basic
-# """
-
+# %% Visualize sample images from the training dataset
 
 # %%
-train_config_list = ""
-val_config_list = ""
+frozen = True
 
-frozen = False
-
-dict_n_errors = {
-    "general": 2,
-}
 
 loss_name = "Contrastiveloss"
 
-transform_train = "transform_data_aug"
-transform_val = "test"
+transform_type_train = "transform_data_aug"
+transform_type_val = "test"
 
 n_augmentation = 1
 backbone = "resnet50"
@@ -57,57 +67,41 @@ num_epochs = 1
 # %%
 
 criterion = model_utils.get_loss_function(loss_name)
-train_data_list = []
 # %%
-for config_type_train in train_config_list:
-    prepare_dataset(
-        dataset_name=preparation_type,
-        n_error=dict_n_errors[config_type_train],
-        **training_config[config_type_train]["preparation"]
-    )
-    transform = image_utils.transform_fc(transform_train)
-    train_data = VeriImageDataset(
-        transform=transform, **training_config[config_type_train]["data"]
-    )
-    # train_data.visualize_images(n=1)
-    print(config_type_train, len(train_data))
-    train_data_list.append(train_data)
+transform_train = image_utils.transform_fc(transform_type_train)
+transform_val = image_utils.transform_fc(transform_type_val)
 
-train_data = torch.utils.data.ConcatDataset(train_data_list)
+train_data = VeriImageDataset(
+    annotations_file=preprocessed_annotation_sharks,
+    train=True,
+    transform=transform_train,
+    crop_type=None,
+)
 
-test_data_list = []
+val_data = VeriImageDataset(
+    annotations_file=preprocessed_annotation_sharks,
+    train=False,
+    transform=transform_val,
+    crop_type=None,
+)
 
-for config_type_val in val_config_list:
 
-    prepare_dataset(
-        dataset_name=preparation_type, **val_config[config_type_val]["preparation"]
-    )
-
-    transform = image_utils.transform_fc(transform_val)
-
-    val_data = VeriImageDataset(
-        transform=transform, **val_config[config_type_val]["data"]
-    )
-
-    # val_data.visualize_images(n=1)
-    print(config_type_val, len(val_data))
-    test_data_list.append(val_data)
-
-val_data = torch.utils.data.ConcatDataset(test_data_list)
 print(len(train_data), len(val_data))
+# %%
+
 dataloaders = {
     "train": DataLoader(
         train_data,
-        batch_size=batch_siz,
+        batch_size=batch_size,
         shuffle=True,
-        num_workers=24,
+        num_workers=0,
         pin_memory=True,
     ),
     "val": DataLoader(
         val_data,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=24,
+        num_workers=0,
         pin_memory=True,
     ),
 }
@@ -119,7 +113,10 @@ if frozen:
 else:
     params = model.parameters()
 
+# %%
 optimizer = optim.SGD(params, lr=0.01, momentum=0.9, weight_decay=0.0001)
+
+# %%
 model = train_veri_model(
     model,
     criterion=criterion,
@@ -127,10 +124,10 @@ model = train_veri_model(
     dataloaders=dataloaders,
     num_epochs=num_epochs,
     freeze_backbone=frozen,
-    save_path=config["save_path"],
-    log_filename=config["log_filename"],
-    log_to_console=False,
-    verbose=False,
+    save_path=PROJECT_PATH + "pretrained_model/model_1.pth",
+    log_filename=PROJECT_PATH + "logs/log_1.log",
+    log_to_console=True,
+    verbose=True,
 )
 
 # %%
