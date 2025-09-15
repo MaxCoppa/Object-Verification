@@ -18,7 +18,7 @@ def prepare_annotation(
     Main function to prepare verification annotations.
 
     Args:
-        raw_annotation_path: Path to the original Veri-Wild annotation CSV.
+        raw_annotation_path: Path to the annotation CSV.
         images_dir: Directory containing images.
         preprocessed_annotation_path: Where to save the output CSV.
         train_ratio: Proportion of samples used for training.

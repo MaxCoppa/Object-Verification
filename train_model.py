@@ -1,6 +1,15 @@
 """
-Executable script to train the Object Verification Siamese Network.
-Supports command-line arguments with short flags.
+Executable script to train the Siamese Network for Object Verification.
+
+This script:
+1. Prepares raw dataset annotations for training and validation.
+2. Constructs PyTorch Datasets and DataLoaders for both splits.
+3. Builds a Siamese model with a configurable backbone.
+4. Trains the model with a specified loss function and optimizer.
+5. Saves the trained model weights and logs training progress.
+
+Typical usage:
+    python train_siamese.py -e 10 -b resnet50 -a 100 -l Contrastiveloss -n shark_v1
 """
 
 import argparse

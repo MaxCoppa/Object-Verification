@@ -1,6 +1,14 @@
 """
-Executable script to prepare annotations for Object Verification.
-Supports command-line arguments with short flags.
+Executable script to prepare dataset annotations for Object Verification tasks.
+
+This script:
+1. Preprocesses raw annotations into a structured CSV format.
+2. Splits the dataset into training and test sets.
+3. Applies augmentation to increase sample diversity.
+4. Optionally loads and verifies dataset samples via DataLoader.
+
+Typical usage:
+    python prepare_annotations.py -l True -r 0.7 -e 2 -a 5
 """
 
 import argparse
