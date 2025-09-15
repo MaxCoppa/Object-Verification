@@ -31,7 +31,7 @@ image_transforms_private.py
 losses_private.py
 
 *.pth
-*.onxx
+*.onnx
 *.log
 *.pt
 

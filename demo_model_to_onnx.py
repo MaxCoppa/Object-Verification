@@ -46,7 +46,7 @@ example_inputs = (
     torch.randn(1, 3, 224, 224),
     torch.randn(1, 3, 224, 224),
 )  # dummy input tensors
-onnx_model_path = MODELS_PATH / "model_1.onxx"  # path to save ONNX model
+onnx_model_path = MODELS_PATH / "model_1.onnx"  # path to save ONNX model
 
 # Export model to ONNX format
 is_export = onnx_utils.export_model_onnx(
@@ -58,7 +58,7 @@ is_export = onnx_utils.export_model_onnx(
 # -------------------------
 start_onnx_load = time.time()
 
-onnx_model = onnx_utils.load_model_onxx(
+onnx_model = onnx_utils.load_model_onnx(
     onnx_model_path=onnx_model_path
 )  # load ONNX model
 ort_session = onnx_utils.create_ort_session(

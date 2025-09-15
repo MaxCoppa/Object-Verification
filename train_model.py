@@ -36,20 +36,7 @@ def parse_args():
     parser.add_argument(
         "-b", "--backbone", type=str, default="resnet50", help="Backbone model"
     )
-    parser.add_argument(
-        "-f",
-        "--frozen",
-        type=bool,
-        default=True,
-        help="Freeze backbone during training",
-    )
-    parser.add_argument(
-        "-r",
-        "--train_ratio",
-        type=float,
-        default=0.5,
-        help="Train/validation split ratio",
-    )
+
     parser.add_argument(
         "-a",
         "--augmentation",
@@ -60,16 +47,38 @@ def parse_args():
     parser.add_argument(
         "-l", "--loss", type=str, default="Contrastiveloss", help="Loss function name"
     )
+    parser.add_argument(
+        "-n",
+        "--model_name",
+        type=str,
+        default="shark_v1",
+        help="Name for saved model and log files",
+    )
+    parser.add_argument(
+        "-tt",
+        "--transform_train",
+        type=str,
+        default="transform_data_aug",
+        help="Type of transform for training data",
+    )
+    parser.add_argument(
+        "-tv",
+        "--transform_val",
+        type=str,
+        default="test",
+        help="Type of transform for validation data",
+    )
     return parser.parse_args()
 
 
 def main(
     epochs=1,
     backbone="resnet50",
-    frozen=True,
-    train_ratio=0.5,
     augmentation=100,
     loss="Contrastiveloss",
+    model_name="model_1",
+    transform_train_type="transform_data_aug",
+    transform_val_type="test",
 ):
     """
     Train the Siamese Object Verification model.
@@ -78,9 +87,11 @@ def main(
         epochs (int): Number of training epochs
         backbone (str): Backbone model
         frozen (bool): Freeze backbone during training
-        train_ratio (float): Train/validation split ratio
         augmentation (int): Number of augmentations per sample
         loss (str): Loss function name
+        model_name (str): Name for saved model and log files
+        transform_train_type (str): Transform type for training
+        transform_val_type (str): Transform type for validation
     """
     # -------------------------
     # Dataset paths
@@ -89,6 +100,7 @@ def main(
     preprocessed_annotation_sharks = ANNOTATIONS_PATH / "train_annotations_sharks.csv"
     images_dir = DATA_PATH / "animals"
 
+    frozen = True
     # -------------------------
     # Prepare data annotations
     # -------------------------
@@ -96,7 +108,7 @@ def main(
         raw_annotation_path=raw_annotation_sharks,
         images_dir=images_dir,
         preprocessed_annotation_path=preprocessed_annotation_sharks,
-        train_ratio=train_ratio,
+        train_ratio=0.5,
         n_augmentation=augmentation,
         n_error=2,
     )
@@ -105,8 +117,8 @@ def main(
     # Setup training
     # -------------------------
     criterion = model_utils.get_loss_function(loss)
-    transform_train = image_utils.transform_fc("transform_data_aug")
-    transform_val = image_utils.transform_fc("test")
+    transform_train = image_utils.transform_fc(transform_train_type)
+    transform_val = image_utils.transform_fc(transform_val_type)
 
     train_data = VeriImageDataset(
         annotations_file=preprocessed_annotation_sharks,
@@ -121,17 +133,27 @@ def main(
         crop_type=None,
     )
 
+    print(f"\n=== Training Summary ===")
+    print(f"Dataset: Shark dataset")
+    print(f"Total annotations: {len(df)}")
+    print(f"Training samples: {len(train_data)}")
+    print(f"Validation samples: {len(val_data)}")
+    print(f"Training epochs: {epochs}")
+    print(f"Backbone: {backbone}")
+    print(f"Loss function: {loss}")
+    print(f"Model name: {model_name}\n")
+
     dataloaders = {
         "train": DataLoader(
             train_data,
-            batch_size=64,  # Fixed batch size
+            batch_size=64,
             shuffle=True,
             num_workers=0,
             pin_memory=True,
         ),
         "val": DataLoader(
             val_data,
-            batch_size=64,  # Fixed batch size
+            batch_size=64,
             shuffle=True,
             num_workers=0,
             pin_memory=True,
@@ -152,11 +174,15 @@ def main(
         dataloaders=dataloaders,
         num_epochs=epochs,
         freeze_backbone=frozen,
-        save_path=MODELS_PATH / "model_1.pth",
-        log_filename=LOGS_PATH / "log_1.log",
+        save_path=MODELS_PATH / f"model_{model_name}.pth",
+        log_filename=LOGS_PATH / f"log_{model_name}.log",
         log_to_console=True,
         verbose=True,
     )
+
+    print(f"\n=== Training Completed ===")
+    print(f"Model saved at: {MODELS_PATH / f'model_{model_name}.pth'}")
+    print(f"Training log saved at: {LOGS_PATH / f'log_{model_name}.log'}\n")
 
 
 if __name__ == "__main__":
@@ -164,8 +190,9 @@ if __name__ == "__main__":
     main(
         epochs=args.epochs,
         backbone=args.backbone,
-        frozen=args.frozen,
-        train_ratio=args.train_ratio,
         augmentation=args.augmentation,
         loss=args.loss,
+        model_name=args.model_name,
+        transform_train_type=args.transform_train,
+        transform_val_type=args.transform_val,
     )

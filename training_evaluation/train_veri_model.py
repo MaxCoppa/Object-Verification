@@ -70,15 +70,20 @@ def train_veri_model(
                 # Log loss and AUC for each phase
                 logger.info(f"{phase} Loss: {epoch_loss:.4f} AUC: {epoch_auc:.4f}")
                 if phase == "val":
-                    for target_fnr, metrics in epoch_FRR.items():
-                        threshold = metrics["Threshold"]
-                        fpr_percentage = metrics["FPR"] * 100
-                        target_fnr_percentage = metrics["FNR"] * 100
 
-                        logger.info(f"Target FNR: {target_fnr_percentage:.2f}%")
-                        logger.info(f"Corresponding FPR: {fpr_percentage:.2f}%")
+                    # Here we can log some information about FNR and corresponding FRR.
+                    # Common metric in biometrics
 
-                        logger.info(f"  Threshold: {threshold:.2f}")
+                    # for target_fnr, metrics in epoch_FRR.items():
+                    #     threshold = metrics["Threshold"]
+                    #     fpr_percentage = metrics["FPR"] * 100
+                    #     target_fnr_percentage = metrics["FNR"] * 100
+
+                    #     logger.info(f"Target FNR: {target_fnr_percentage:.2f}%")
+                    #     logger.info(f"Corresponding FPR: {fpr_percentage:.2f}%")
+
+                    #     logger.info(f"  Threshold: {threshold:.2f}")
+
                     # Append AUC to history
                     if phase == "train":
                         train_auc_history.append(epoch_auc.item())

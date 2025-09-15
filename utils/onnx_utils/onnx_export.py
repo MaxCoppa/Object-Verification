@@ -23,7 +23,7 @@ def export_model_onnx(model, example_inputs, onnx_model_path):
     return True
 
 
-def load_model_onxx(onnx_model_path):
+def load_model_onnx(onnx_model_path):
     """
     Load and check the ONNX model
     """

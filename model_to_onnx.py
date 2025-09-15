@@ -1,5 +1,5 @@
 """
-Executable script to benchmark Object Verification Siamese Network with PyTorch and ONNX.
+Executable script to compare Object Verification Siamese Network with PyTorch and ONNX.
 Supports command-line arguments with short flags.
 """
 
@@ -17,21 +17,9 @@ from config import ANNOTATIONS_PATH, MODELS_PATH
 def parse_args():
     """Parse command-line arguments with short flags."""
     parser = argparse.ArgumentParser(
-        description="Benchmark Object Verification Siamese model with PyTorch and ONNX."
+        description="Create ONNX model and Compare model with PyTorch and ONNX."
     )
-    parser.add_argument(
-        "-n", "--iterations", type=int, default=10, help="Number of test iterations"
-    )
-    parser.add_argument(
-        "-d",
-        "--device",
-        type=str,
-        default="cpu",
-        help="Device to run model on (cpu or cuda)",
-    )
-    parser.add_argument(
-        "-f", "--file_type", type=str, default="jpg", help="Image file type"
-    )
+
     parser.add_argument(
         "-m",
         "--model_path",
@@ -47,33 +35,35 @@ def parse_args():
         help="Path to save/load ONNX model",
     )
     parser.add_argument(
-        "-B",
-        "--benchmark",
-        action="store_true",
-        help="Run the full benchmarking loop (image loading + PyTorch + ONNX inference)",
+        "-b",
+        "--comparaison_torch_onnx",
+        type=bool,
+        default=False,
+        help="Run the full comparaison loop (image loading + PyTorch + ONNX inference)",
     )
     return parser.parse_args()
 
 
 def main(
-    iterations=10,
-    device="cpu",
-    file_type="jpg",
     model_path="model_1.pth",
     onnx_path="model_1.onnx",
-    benchmark=False,
+    b=False,
 ):
     """
-    Benchmark PyTorch and ONNX inference for the Object Verification Siamese model.
+    Create ONNX model and Compare model with PyTorch and ONNX for the Object Verification Siamese model.
 
     Args:
         iterations (int): Number of random image pairs to test
-        device (str): Device for computation (cpu or cuda)
         file_type (str): Image file type
         model_path (str): Path to PyTorch model
         onnx_path (str): Path to save/load ONNX model
-        benchmark (bool): Whether to run the full benchmarking loop
+        b (bool): Whether to run the full comparaison loop
     """
+
+    device = "cpu"  # Device here not cuda
+    file_type = "jpg"  # Image file type
+    iterations = 25  # Number of random image pairs to test ONNX VS Pytorch
+
     # -------------------------
     # Load PyTorch model
     # -------------------------
@@ -96,13 +86,15 @@ def main(
 
     # Load ONNX model and create inference session
     start_onnx_load = time.time()
-    onnx_model = onnx_utils.load_model_onxx(onnx_model_path)
+    onnx_model = onnx_utils.load_model_onnx(onnx_model_path)
     ort_session = onnx_utils.create_ort_session(onnx_model_path)
     end_onnx_load = time.time()
     print(f"ONNX load + session creation time: {end_onnx_load - start_onnx_load:.2f}s")
 
-    if not benchmark:
-        print("Benchmarking skipped. Use --benchmark to run the full loop.")
+    if not b:
+        print(
+            "Torch comparaison ONNX skipped. Use --comparaison_torch_onnx to run the full loop."
+        )
         return
 
     # -------------------------
@@ -126,7 +118,7 @@ def main(
     total_onnx_time = 0.0
 
     # -------------------------
-    # Benchmark loop
+    # Comparaison loop
     # -------------------------
     for _ in tqdm(range(iterations)):
         label = rd.randint(0, 1)
@@ -181,7 +173,7 @@ def main(
             torch.testing.assert_close(torch.tensor(t_out), torch.tensor(o_out))
 
     # -------------------------
-    # Print benchmark results
+    # Print Comparaison results
     # -------------------------
     print("\n--- Averages over {:,} iterations ---".format(iterations))
     print(f"Image load & transform: {total_img_time / iterations:.4f}s")
@@ -192,10 +184,7 @@ def main(
 if __name__ == "__main__":
     args = parse_args()
     main(
-        iterations=args.iterations,
-        device=args.device,
-        file_type=args.file_type,
         model_path=args.model_path,
         onnx_path=args.onnx_path,
-        benchmark=args.benchmark,
+        b=args.comparaison_torch_onnx,
     )
