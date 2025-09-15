@@ -7,7 +7,7 @@ It converts raw image/object metadata into paired or triplet datasets that can b
 
 ## Key Features
 
-- Processes raw **CSV annotation files** into a standardized format.  
+- Processes raw annotation files into a standardized **tabular format** (saved as CSV).  
 - Groups images by object ID and camera.  
 - Generates **positive and negative pairs** (`couples`) or **triplets**.  
 - Enables data augmentation via random shuffling of pairs.  
@@ -20,20 +20,21 @@ It converts raw image/object metadata into paired or triplet datasets that can b
 
 Currently, the module provides:
 
-- **`prepare_annotation`**:  
+- **`prepare_annotation`**  
   Converts CSV-based annotations into a structured dataset for verification.  
   Supports both pair-based (`couples`) and triplet-based (`triplets`) sampling.  
 
 Planned extensions include:
 
-- **`prepare_coco_annotation`** (upcoming):  
-  Support for COCO-style JSON annotations.  
+- **`prepare_coco_annotation`** (upcoming)  
+  Adds support for COCO-style JSON annotations.  
 
 ---
 
 ## Output Format
 
-The processed dataset is returned as a structured **CSV** (and a `DataFrame` in memory). Typical columns include:  
+The processed dataset is saved as a **CSV file** (and returned as a `DataFrame` in memory).  
+Typical columns include:
 
 - `img_path`: Path to the first image.  
 - `couple_path`: Path to the second image.  
@@ -41,8 +42,14 @@ The processed dataset is returned as a structured **CSV** (and a `DataFrame` in 
 - `train`: `1` if assigned to training, `0` if assigned to testing.  
 - `img_object_id`: Identifier of the first image’s object.  
 - `couple_object_id`: Identifier of the second image’s object.  
+- `img_crop` *(upcoming)*: Coordinates of the crop region in the first image.  
+- `couple_crop` *(upcoming)*: Coordinates of the crop region in the paired image.  
 
-For triplet sampling, additional fields are included, e.g., `error_path` and `error_object_id`.  
+For triplet sampling, additional fields are included, such as:  
+
+- `error_path`: Path to the third image (negative example).  
+- `error_object_id`: Identifier of the negative example’s object.  
+- `error_crop` *(upcoming)*: Coordinates of the crop region for the negative example.  
 
 All paths are validated, and invalid entries are automatically removed.  
 

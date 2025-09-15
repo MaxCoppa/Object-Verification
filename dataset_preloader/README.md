@@ -1,88 +1,69 @@
 # Dataset Preloader
 
-The **Dataset Preloader** submodule provides custom PyTorch `Dataset` classes for the **Object Verification** pipeline.  
-It handles loading of image pairs or triplets from preprocessed annotation files, making them directly usable in **training, validation, and evaluation** of Siamese networks.
+The **Dataset Preloader** submodule defines custom PyTorch `Dataset` classes for the Object Verification pipeline.  
+It provides a clean interface to load image pairs or triplets from preprocessed annotations, supporting both **training** and **evaluation**.
 
 ---
 
 ## VeriImageDataset
 
-This dataset is intended for **training** Siamese networks.  
-It supports both **pair-based** and **triplet-based** sampling depending on configuration.
+A `torch.utils.data.Dataset` for **training Siamese networks**.  
+Samples positive and negative pairs (or triplets) according to the annotation file.
 
-### Arguments
+### Parameters
 
-- **annotations_file** (`str`): Path to the CSV file with preprocessed annotations.  
-- **correct_pair_ratio** (`float`): Probability of sampling a positive pair in triplet mode. Default: `0.5`.  
-- **img_dir** (`str | None`): Optional base directory for image files.  
-- **train** (`bool`): Whether to load the training set (`True`) or the test set (`False`).  
-- **transform** (`callable | None`): Optional torchvision transform(s) applied to images.  
-- **file_type** (`str`): Image format (e.g. `"jpg"`, `"png"`). Default: `"jpg"`.  
-- **pairing_type** (`str`): Pairing strategy, `"couples"` for pairs or `"triplets"` for triplets.  
-- **crop_type** (`str | None`): Cropping strategy to apply if needed.  
+- `annotations_file` (*str*): Path to the preprocessed annotations CSV.  
+- `correct_pair_ratio` (*float, default=0.5*): In triplet mode, probability of sampling a positive pair.  
+- `img_dir` (*str or None*): Optional base directory for images (if paths in CSV are relative).  
+- `train` (*bool, default=True*): Load the training subset (`True`) or the test subset (`False`).  
+- `transform` (*callable or None*): Torchvision transform(s) applied to images.  
+- `file_type` (*str, default="jpg"*): Image format (e.g. `"jpg"`, `"png"`).  
+- `pairing_type` (*str, default="couples"*): Sampling strategy — `"couples"` for pairs or `"triplets"` for triplets.  
+- `crop_type` (*str or None*): Cropping strategy applied to images, if available.  
 
-### Returned Item
+### Returns
 
-Each sample has the format:
+Each dataset item is a tuple:  
 
-```
-
-(image\_tensor, couple\_tensor, label)
-
-```
-
-- `image_tensor`: First image tensor.  
-- `couple_tensor`: Second image tensor.  
+- `image_tensor`: Tensor of the first image.  
+- `couple_tensor`: Tensor of the paired image (positive or negative).  
 - `label`: `1` if both images belong to the same object, `0` otherwise.  
-
-### Features
-
-- Flexible support for **pairs** and **triplets**.  
-- Compatible with custom transforms and crop strategies.  
-- Visualization utilities to inspect training samples.  
 
 ---
 
 ## VeriImageDatasetTest
 
-This dataset is tailored for **evaluation and testing**.  
-In addition to images and labels, it also provides file paths for **traceability**.
+A `torch.utils.data.Dataset` for **evaluation and testing**.  
+Extends `VeriImageDataset` by also returning file paths for traceability.
 
-### Arguments
+### Parameters
 
-- **annotations_file** (`str`): Path to the CSV file with preprocessed annotations.  
-- **img_dir** (`str | None`): Optional base directory for image files.  
-- **transform** (`callable | None`): Optional torchvision transform(s) applied to images.  
-- **file_type** (`str`): Image format (e.g. `"jpg"`, `"png"`). Default: `"jpg"`.  
-- **crop_type** (`str | None`): Cropping strategy to apply if needed.  
+- `annotations_file` (*str*): Path to the preprocessed annotations CSV.  
+- `img_dir` (*str or None*): Optional base directory for images (if paths in CSV are relative).  
+- `transform` (*callable or None*): Torchvision transform(s) applied to images.  
+- `file_type` (*str, default="jpg"*): Image format (e.g. `"jpg"`, `"png"`).  
+- `crop_type` (*str or None*): Cropping strategy applied to images, if available.  
 
-### Returned Item
+### Returns
 
-Each sample has the format:
+Each dataset item is a tuple:  
 
-```
-
-(image\_tensor, couple\_tensor, label, image\_path, couple\_path)
-
-```
-
-- `image_tensor`: First image tensor.  
-- `couple_tensor`: Second image tensor.  
+- `image_tensor`: Tensor of the first image.  
+- `couple_tensor`: Tensor of the paired image.  
 - `label`: `1` for a positive pair, `0` for a negative pair.  
-- `image_path`: Path to the first image.  
-- `couple_path`: Path to the second image.  
-
-### Features
-
-- Provides **traceability** by returning file paths with tensors.  
-- Supports cropping and transforms during evaluation.  
-- Visualization utilities to inspect evaluation samples.  
+- `image_path`: Path to the first image file.  
+- `couple_path`: Path to the second image file.  
 
 ---
 
+## Expected Annotation Schema
+
+Both datasets rely on CSV files generated by the **dataset annotation preparation** submodule.  
+
+
 ## Integration Notes
 
-- Both datasets operate on CSV annotation files produced by the **`dataset_annotation_preparation`** submodule.  
-- They integrate seamlessly with the **training** and **evaluation** pipelines for Siamese models.  
-- Designed for flexibility across pairing strategies, image transforms, and cropping workflows.  
-```
+- Designed to plug directly into `torch.utils.data.DataLoader` for efficient batching.  
+- Consumes the CSV annotations prepared by the **dataset annotation preparation** submodule.  
+- Ensures full compatibility with the **training** and **evaluation** pipelines for Siamese models.  
+- Flexible enough to support different pairing strategies, transforms, and cropping workflows.  
