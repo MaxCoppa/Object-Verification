@@ -31,4 +31,8 @@ image_transforms_private.py
 losses_private.py
 
 *.pth
+*.onxx
 *.log
+*.pt
+
+data/preprocessed_annotations/*

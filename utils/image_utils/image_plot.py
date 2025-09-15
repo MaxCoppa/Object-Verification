@@ -14,8 +14,8 @@ from .image_transforms import transform_image
 def visualise_images_df(
     df,
     n_images=20,
-    file_type="png",
-    crop_type="object",
+    file_type="jpg",
+    crop_type=None,
     debug=True,
     transform_type="visualise",
 ):

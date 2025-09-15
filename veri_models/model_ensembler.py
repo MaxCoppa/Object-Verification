@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class ModelEnsembler(nn.Module):
-    def __init__(self, models, device="cuda"):
+    def __init__(self, models, device="cpu"):
         super(ModelEnsembler, self).__init__()
         self.models = models
         self.device = device

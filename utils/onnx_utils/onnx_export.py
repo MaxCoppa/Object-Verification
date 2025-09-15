@@ -10,10 +10,16 @@ def export_model_onnx(model, example_inputs, onnx_model_path):
     """
     Export the PyTorch model to ONNX format
     """
-    onnx_program = torch.onnx.export(model, example_inputs, dynamo=True)
-    onnx_program.optimize()
-    onnx_program.save(onnx_model_path)
 
+    torch.onnx.export(
+        model,
+        example_inputs,
+        onnx_model_path,
+        export_params=True,  # store the trained parameters
+        do_constant_folding=True,  # optimize constants
+        input_names=["input"],  # name of input tensor
+        output_names=["output"],  # name of output tensor
+    )
     return True
 
 

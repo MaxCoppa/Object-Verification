@@ -56,7 +56,7 @@ df = prepare_annotation(
 # -------------------------
 frozen = True
 loss_name = "Contrastiveloss"
-
+name_model = "2"
 transform_type_train = "transform_data_aug"
 transform_type_val = "test"
 
@@ -130,8 +130,8 @@ model = train_veri_model(
     dataloaders=dataloaders,
     num_epochs=num_epochs,
     freeze_backbone=frozen,
-    save_path=MODELS_PATH / "model_1.pth",
-    log_filename=LOGS_PATH / "log_1.log",
+    save_path=MODELS_PATH / f"model_{name_model}.pth",
+    log_filename=LOGS_PATH / f"log_{name_model}.log",
     log_to_console=True,
     verbose=True,
 )
