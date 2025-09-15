@@ -8,14 +8,9 @@ __all__ = [
     "img_loader",
     "load_image_file_generic",
     "visualise_images_df",
-    "check_time_using_hours",
-    "check_time_using_suntime",
-    "filter_by_valid_hours",
     "validate_correct_img_path",
 ]
 
-from .tsp_filter import filter_by_valid_hours
-from .tsp_utils import check_time_using_hours, check_time_using_suntime
 from .path_processing import (
     validate_correct_img_path,
 )

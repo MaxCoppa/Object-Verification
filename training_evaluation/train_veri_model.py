@@ -28,7 +28,24 @@ def train_veri_model(
     verbose=False,
 ):
     """
-    Trains a Siamese model with both training and validation phases, saving the best model permanently.
+    Train a Siamese model with both training and validation phases,
+    saving the best model permanently.
+
+    Args:
+        model (nn.Module): The Siamese model.
+        criterion (nn.Module): Loss function (e.g., CosineEmbeddingLoss).
+        optimizer (optim.Optimizer): Optimizer instance.
+        dataloaders (dict): Dictionary with "train" and "val" DataLoaders.
+        num_epochs (int): Number of training epochs.
+        freeze_backbone (bool): If True, only the final fully connected layers are trained.
+        save_path (str): Path to save the best model.
+        plot (bool): Whether to plot training/validation AUC curves.
+        log_filename (str | None): Optional path to a log file.
+        log_to_console (bool): Whether to print logs to console.
+        verbose (bool): If True, logs additional batch-level details.
+
+    Returns:
+        nn.Module: The trained model with best weights loaded.
     """
 
     logger = setup_logger(log_filename, log_to_console)
@@ -128,7 +145,21 @@ def train_epoch(
     verbose,
 ):
     """
-    Train or evaluate the model for one epoch on the given dataset (train or val).
+    Train or evaluate the model for one epoch on the given dataset.
+
+    Args:
+        model (nn.Module): The Siamese model.
+        dataloader (DataLoader): DataLoader for the phase ("train" or "val").
+        criterion (nn.Module): Loss function.
+        optimizer (optim.Optimizer): Optimizer.
+        device (torch.device): Training device.
+        phase (str): "train" or "val".
+        freeze_backbone (bool): If True, only FC layers are trainable.
+        logger (logging.Logger): Logger instance.
+        verbose (bool): If True, logs batch progress.
+
+    Returns:
+        tuple: (epoch_loss, epoch_auc, epoch_FRR)
     """
     if not freeze_backbone:
         model.train() if phase == "train" else model.eval()
@@ -159,10 +190,13 @@ def train_epoch(
         optimizer.zero_grad()
 
         with torch.set_grad_enabled(phase == "train"):
+
+            # Forward pass through Siamese network
             output1, output2 = model(image1, image2)
             loss = criterion(output1, output2, labels)
             _, scores = model_utils.predict_distance(output1, output2)
 
+            # Backpropagation only in training phase
             if phase == "train":
                 loss.backward()
                 optimizer.step()

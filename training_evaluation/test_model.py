@@ -8,9 +8,23 @@ from tqdm import tqdm
 import torch
 
 
-def test_model(model, dataloader, device="cuda", print_results=True):
+def test_model(model, dataloader, device="cpu", print_results=True):
     """
-    Evaluate the model for one epoch on the given dataset (test or val).
+    Evaluate a Siamese verification model on a given dataset.
+
+    Args:
+        model (torch.nn.Module): The trained Siamese model to evaluate.
+        dataloader (DataLoader): DataLoader that yields batches of
+            (image1, image2, label, image1_path, image2_path).
+        device (str): Device to run evaluation on ("cuda" or "cpu").
+        print_results (bool): If True, prints evaluation metrics.
+
+    Returns:
+        tuple:
+            - results_df (pd.DataFrame): Per-sample evaluation results with predictions and scores.
+            - results (dict): Global evaluation metrics (e.g., accuracy, AUC).
+            - quartiles_results (dict): Metrics aggregated by score quartiles.
+            - FRR_results (dict): False Rejection Rate metrics at selected thresholds.
     """
     start_time = time.time()
     print(f"Started Evaluation at {time.ctime(start_time)}")

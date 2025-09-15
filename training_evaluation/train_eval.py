@@ -14,7 +14,7 @@ from tqdm import tqdm
 from utils.model_utils.metrics import evaluate_FRR
 
 
-def ttrain_and_eval_veri_model(
+def train_and_eval_veri_model(
     model,
     criterion,
     optimizer,

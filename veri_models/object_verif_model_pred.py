@@ -1,13 +1,8 @@
-import cv2
 import torch
 import torch.nn as nn
-import torch.optim as optim
-import numpy as np
 from utils import model_utils
 
 import torchvision.models as models
-from torchvision import transforms
-from torch.utils.data import DataLoader, Dataset
 
 
 # Definition of the Siamese Network model

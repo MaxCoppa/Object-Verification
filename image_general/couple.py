@@ -59,13 +59,6 @@ class CoupleImage:
         self.score = float(score)
         return self.prediction, self.score
 
-    def check_valid_hours(self):
-
-        x = self.img1.tsp
-        y = self.img2.tsp
-
-        return image_utils.check_time_using_hours(x, y)
-
     def show(self):
         vis1 = self.img1.transform_img_visualise()
         vis2 = self.img2.transform_img_visualise()

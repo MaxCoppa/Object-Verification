@@ -1,20 +1,33 @@
-import cv2
 import torch
 import torch.nn as nn
-import torch.optim as optim
-import numpy as np
 from utils import model_utils
 
 import torchvision.models as models
-from torchvision import transforms
-from torch.utils.data import DataLoader, Dataset
 
 
-# Definition of the Siamese Network model
 class ObjectVeriSiamese(nn.Module):
+    """
+    Siamese Network for Object Verification tasks.
+
+    This model wraps different pretrained backbones (ResNet, EfficientNet, ViT, MobileNet),
+    freezes them optionally, and appends a small fully connected layer for embedding extraction.
+    The embeddings from two input images can be compared using a distance metric.
+
+    Args:
+        backbone (str): Backbone architecture. Options are:
+            ["resnet50", "efficientnet_v2_s", "vit16", "mobilenet_v3_small"].
+        freeze_backbone (bool): If True, keeps backbone weights frozen during training.
+
+    Attributes:
+        backbone (nn.Module): Feature extractor (truncated pretrained backbone).
+        fc (nn.Sequential): Fully connected layer mapping features → 128D embedding.
+        device (torch.device): Device used for computation (GPU if available).
+    """
+
     def __init__(self, backbone="resnet50", freeze_backbone=True):
         super(ObjectVeriSiamese, self).__init__()
 
+        # Dictionary of supported backbones with weight paths and output dims
         dict_backbone = {
             "efficientnet_v2_s": {
                 "model": models.efficientnet_v2_s(),
@@ -49,7 +62,7 @@ class ObjectVeriSiamese(nn.Module):
             )
         )
 
-        # Remove the last FC layer and keep only the feature extractor
+        # Remove classification heads → keep feature extractor only
         self.backbone = torch.nn.Sequential(*list(model.children())[:-1])
 
         if backbone in ["vit16"]:
