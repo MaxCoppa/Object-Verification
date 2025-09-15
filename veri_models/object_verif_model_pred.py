@@ -5,7 +5,6 @@ from utils import model_utils
 import torchvision.models as models
 
 
-# Definition of the Siamese Network model
 class ObjectVeriSiameseMC(nn.Module):
     def __init__(self, backbone="resnet50", freeze_backbone=True):
         super(ObjectVeriSiameseMC, self).__init__()
