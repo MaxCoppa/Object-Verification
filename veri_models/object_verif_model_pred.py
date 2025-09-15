@@ -28,6 +28,10 @@ class ObjectVeriSiameseMC(nn.Module):
                 "model": models.vit_b_16(),
                 "outuput_shape": 768,
             },
+            "mobilenet_v3_small": {
+                "model": models.mobilenet_v3_small(),
+                "outuput_shape": 576,
+            },
         }
         # Load backbone
         model = dict_backbone[backbone]["model"]
@@ -39,9 +43,7 @@ class ObjectVeriSiameseMC(nn.Module):
             model.heads = torch.nn.Identity()
             self.backbone = model
 
-        if backbone in [
-            "efficientnet_v2_s",
-        ]:
+        if backbone in ["efficientnet_v2_s", "mobilenet_v3_small"]:
             model.classifier = torch.nn.Identity()
             self.backbone = model
 

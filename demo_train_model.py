@@ -56,12 +56,12 @@ df = prepare_annotation(
 # -------------------------
 frozen = True
 loss_name = "Contrastiveloss"
-name_model = "2"
+model_name = "2"
 transform_type_train = "transform_data_aug"
 transform_type_val = "test"
 
 n_augmentation = 1
-backbone = "resnet50"
+backbone = "mobilenet_v3_small"
 batch_size = 64
 num_epochs = 1
 
@@ -130,8 +130,8 @@ model = train_veri_model(
     dataloaders=dataloaders,
     num_epochs=num_epochs,
     freeze_backbone=frozen,
-    save_path=MODELS_PATH / f"model_{name_model}.pth",
-    log_filename=LOGS_PATH / f"log_{name_model}.log",
+    save_path=MODELS_PATH / f"model_{model_name}.pth",
+    log_filename=LOGS_PATH / f"log_{model_name}.log",
     log_to_console=True,
     verbose=True,
 )

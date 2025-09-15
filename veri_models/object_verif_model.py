@@ -31,6 +31,11 @@ class ObjectVeriSiamese(nn.Module):
                 "weights_path": "veri_models/backbone/vit_b_16-c867db91.pth",
                 "outuput_shape": 768,
             },
+            "mobilenet_v3_small": {
+                "model": models.mobilenet_v3_small(),
+                "weights_path": "veri_models/backbone/mobilenet_v3_small-047dcff4.pth",
+                "outuput_shape": 576,
+            },
         }
         # Load backbone
         model = dict_backbone[backbone]["model"]
@@ -47,13 +52,11 @@ class ObjectVeriSiamese(nn.Module):
         # Remove the last FC layer and keep only the feature extractor
         self.backbone = torch.nn.Sequential(*list(model.children())[:-1])
 
-        if backbone in ["vit16", "vit_b_32", "vit_h_14"]:
+        if backbone in ["vit16"]:
             model.heads = torch.nn.Identity()
             self.backbone = model
 
-        if backbone in [
-            "efficientnet_v2_s",
-        ]:
+        if backbone in ["efficientnet_v2_s", "mobilenet_v3_small"]:
             model.classifier = torch.nn.Identity()
             self.backbone = model
 
