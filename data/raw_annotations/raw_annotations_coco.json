@@ -1,0 +1,48 @@
+{
+    "images": [
+      {
+        "id": 1,
+        "file_name": "obj1/obj1_1.jpg",
+        "width": 640,
+        "height": 480,
+        "acquisition_light": "day",
+        "location": "beach",
+        "site": "siteA",
+        "config": "cam1",
+        "type": "front"
+      },
+      {
+        "id": 2,
+        "file_name": "obj2/obj2_1.jpg",
+        "width": 640,
+        "height": 480,
+        "acquisition_light": "day",
+        "location": "reef",
+        "site": "siteB",
+        "config": "cam2",
+        "type": "side"
+      }
+    ],
+    "annotations": [
+      {
+        "id": 10,
+        "image_id": 1,
+        "bbox": [100, 150, 200, 200],
+        "area": 40000,
+        "iscrowd": 0,
+        "category_id": 1
+      },
+      {
+        "id": 11,
+        "image_id": 2,
+        "bbox": [120, 100, 180, 250],
+        "area": 45000,
+        "iscrowd": 0,
+        "category_id": 1
+      }
+    ],
+    "categories": [
+      { "id": 1, "name": "shark" }
+    ]
+  }
+  
