@@ -5,7 +5,7 @@ import random
 
 # Project modules
 from utils import image_utils
-from veri_models import ObjectVeriSiamese
+from object_verif_models import ObjectVeriSiamese
 from image_general import ImagePreprocessor, ImageFactory
 
 # Import project configuration

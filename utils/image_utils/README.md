@@ -6,9 +6,9 @@ It covers **loading, preprocessing, augmentation, visualization, and path manage
 ---
 
 ## Components
-- **`image_loader.py`** – Loading, cropping, anonymization, padding.  
-- **`image_transforms.py`** – Predefined transforms for test, visualisation, and augmentation.  
-- **`image_plot.py`** – Visualization of image pairs with labels, predictions, and scores.  
+- **`image_loader.py`** - Loading, cropping, anonymization, padding.  
+- **`image_transforms.py`** - Predefined transforms for test, visualisation, and augmentation.  
+- **`image_plot.py`** - Visualization of image pairs with labels, predictions, and scores.  
 
 ---
 

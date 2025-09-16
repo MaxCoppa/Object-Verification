@@ -31,22 +31,22 @@ class ObjectVeriSiamese(nn.Module):
         dict_backbone = {
             "efficientnet_v2_s": {
                 "model": models.efficientnet_v2_s(),
-                "weights_path": "veri_models/backbone/efficientnet_v2_s-dd5fe13b.pth",
+                "weights_path": "object_verif_models/backbone/efficientnet_v2_s-dd5fe13b.pth",
                 "outuput_shape": 1280,
             },
             "resnet50": {
                 "model": models.resnet50(),
-                "weights_path": "veri_models/backbone/resnet50-11ad3fa6.pth",
+                "weights_path": "object_verif_models/backbone/resnet50-11ad3fa6.pth",
                 "outuput_shape": 2048,
             },
             "vit16": {
                 "model": models.vit_b_16(),
-                "weights_path": "veri_models/backbone/vit_b_16-c867db91.pth",
+                "weights_path": "object_verif_models/backbone/vit_b_16-c867db91.pth",
                 "outuput_shape": 768,
             },
             "mobilenet_v3_small": {
                 "model": models.mobilenet_v3_small(),
-                "weights_path": "veri_models/backbone/mobilenet_v3_small-047dcff4.pth",
+                "weights_path": "object_verif_models/backbone/mobilenet_v3_small-047dcff4.pth",
                 "outuput_shape": 576,
             },
         }

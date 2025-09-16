@@ -14,7 +14,7 @@ from sklearn.metrics import roc_auc_score
 from utils.model_utils.metrics import evaluate_FRR
 
 
-def train_veri_model(
+def train_object_verif_model(
     model,
     criterion,
     optimizer,

@@ -1,7 +1,7 @@
 # Verification Models
 
 
-The `veri_models` module provides the core architectures for **verification tasks**.  
+The `object_verif_models` module provides the core architectures for **verification tasks**.  
 It includes:
 
 - **ObjectVeriSiamese**: A Siamese network built on top of various pretrained backbones (ResNet, EfficientNet, ViT, MobileNet).  

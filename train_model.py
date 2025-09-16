@@ -21,8 +21,8 @@ import torch.optim as optim
 from dataset_annotation_preparation import prepare_annotation
 from dataset_preloader import VeriImageDataset
 from utils import image_utils, model_utils
-from veri_models import ObjectVeriSiamese
-from training_evaluation import train_veri_model
+from object_verif_models import ObjectVeriSiamese
+from training_evaluation import train_object_verif_model
 
 # Import project configuration
 from config import (
@@ -176,7 +176,7 @@ def main(
     # -------------------------
     # Train the model
     # -------------------------
-    model = train_veri_model(
+    model = train_object_verif_model(
         model,
         criterion=criterion,
         optimizer=optimizer,

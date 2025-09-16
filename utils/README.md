@@ -7,10 +7,10 @@ It centralizes functionality for image preprocessing, model evaluation, configur
 
 ## Submodules
 
-- **image_utils** – Image loading, preprocessing, cropping, anonymization, and visualization.  
-- **model_utils** – Losses, similarity functions, predictions, metrics, and evaluation plots.  
-- **config_utils** – Configuration parsing and management.  
-- **onnx_utils** – Utilities for exporting and handling ONNX models.
+- **image_utils** - Image loading, preprocessing, cropping, anonymization, and visualization.  
+- **model_utils** - Losses, similarity functions, predictions, metrics, and evaluation plots.  
+- **config_utils** - Configuration parsing and management.  
+- **onnx_utils** - Utilities for exporting and handling ONNX models.
 
 ---
 

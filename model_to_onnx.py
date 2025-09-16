@@ -9,7 +9,7 @@ import random as rd
 import torch
 from tqdm import tqdm
 from utils import image_utils, onnx_utils
-from veri_models import ObjectVeriSiameseMC
+from object_verif_models import ObjectVeriSiameseMC
 from image_general import ImagePreprocessor, ImageFactory
 from config import ANNOTATIONS_PATH, MODELS_PATH
 
