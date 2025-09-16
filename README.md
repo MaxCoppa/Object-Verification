@@ -1,130 +1,143 @@
-# Object Verification with Siamese Networks
+# Object Verification with Siamese Networks  
 
-This project implements a **Siamese Neural Network** for object verification using **PyTorch**.  
+**Object verification** is the task of determining whether two images correspond to the same underlying object. Unlike object classification, where the goal is to assign an image to a fixed set of categories, object verification focuses on **pairwise comparison**: given two inputs, decide whether they represent the same instance or not.  
 
-Unlike traditional classifiers that predict a specific label for each image, a Siamese Network learns a **similarity function**: it compares two inputs and decides whether they represent the same object.  
-This approach is especially effective for verification tasks where the number of possible object classes is very large, constantly growing, or even unseen during training.
+This problem arises in several high-impact domains:  
+- **Face verification** – confirming whether two face images belong to the same person.  
+- **Signature and handwriting verification** – validating the authenticity of documents.  
+- **Product deduplication** – detecting duplicate listings in large-scale e-commerce platforms.  
+- **Medical imaging** – comparing scans across time to track disease progression.  
 
-By learning a shared embedding space, Siamese Networks generalize beyond fixed categories and provide a robust solution for tasks such as:
+A key challenge in object verification is **scalability**: the number of possible classes can be extremely large, constantly changing, or even unseen during training. Traditional classification models struggle in such settings because they require a fixed label space.  
 
-- **Face verification** (Are these two faces the same person?)  
-- **Signature and handwriting matching**  
-- **Product deduplication in e-commerce**  
-- **Wildlife re-identification** (tracking individual animals across images)  
+**Siamese Neural Networks (SNNs)** address this limitation by learning a **similarity function**. Instead of predicting labels, the model maps images into a shared embedding space and evaluates their distance. If the embeddings are close, the inputs are likely the same object; if far apart, they are not. This approach enables:  
+- **Generalization to unseen classes**  
+- **Robustness to intra-class variation** (e.g., lighting, angle, occlusion)  
+- **Efficiency in large-scale retrieval and verification tasks**  
 
-This repository provides a **complete pipeline** for object verification with Siamese Networks, covering everything from dataset preparation to model deployment.
-
----
-
-## Repository Structure
-
-### Submodules (core building blocks)
-- **dataset annotation preparation**: preprocess raw annotations into structured CSVs, with train/test splits and augmentations.  
-- **dataset preloader**: PyTorch `Dataset` classes for loading image pairs and triplets for training and evaluation.  
-- **image general**: utilities for image preprocessing, transformations, and augmentation.  
-- **training evaluation**: training loops, evaluation routines, logging, and metric computation.  
-- **utils**: helper functions for models, images, ONNX export, and metrics.  
-- **veri models**: Siamese model definitions and configurable backbones.  
-
-### Other directories
-- **data**: raw annotations, preprocessed CSVs, and image datasets.  
-- **logs**: training logs and metric reports.  
-- **pretrained model**: saved checkpoints of trained networks.  
+This repository provides a **complete training and deployment pipeline** for object verification with Siamese Networks, covering dataset preparation, model training, ONNX export, and demonstration scripts.  
 
 ---
 
-## Scripts
+## Repository Structure  
 
-### `create_annotation.py`
-Prepare dataset annotations from raw CSV files.
+### Core Modules  
+- **`dataset_annotation_preparation/`** – preprocess raw annotations into structured CSVs with train/test splits and augmentations.  
+- **`dataset_preloader/`** – PyTorch `Dataset` classes for loading image pairs or triplets.  
+- **`image_general/`** – utilities for preprocessing, augmentation, and transformations.  
+- **`training_evaluation/`** – training loops, evaluation routines, logging, and metric computation.  
+- **`utils/`** – helper functions for metrics, model management, and ONNX export.  
+- **`veri_models/`** – Siamese architectures with configurable backbones.  
 
-**Arguments**
-- `--load / -l`: Load images after annotation preparation (default: `False`)  
-- `--train_ratio / -r`: Train/test split ratio (default: `0.5`)  
-- `--n_error / -e`: Allowed preprocessing errors (default: `2`)  
-- `--n_augmentation / -a`: Number of augmentations per sample (default: `5`)  
+### Supporting Directories  
+- **`data/`** – raw annotations, processed CSVs, and datasets.  
+- **`logs/`** – training logs and evaluation metrics.  
+- **`pretrained_model/`** – saved model checkpoints and exported ONNX files.  
 
-**Outputs**
-- Preprocessed CSV file saved under `data/preprocessed_annotations/`.  
-- If `--load` is enabled, images are loaded and validated directly via a `DataLoader`.  
+---
 
-**Example**
+## Key Scripts  
+
+### `create_annotation.py`  
+Prepares dataset annotations from raw CSVs.  
+
+**Arguments**  
+- `--load / -l` – load and validate images after preprocessing (default: `False`)  
+- `--train_ratio / -r` – train/test split ratio (default: `0.5`)  
+- `--n_error / -e` – allowed preprocessing errors (default: `2`)  
+- `--n_augmentation / -a` – number of augmentations per sample (default: `5`)  
+
+**Outputs**  
+- Preprocessed annotations stored in `data/preprocessed_annotations/`.  
+- Optional validation using PyTorch `DataLoader`.  
+
+**Example**  
 ```bash
 python create_annotation.py -l True -r 0.7 -e 2 -a 5
-```
+````
 
 ---
 
 ### `train_model.py`
-Train a Siamese network for object verification.  
-Supports configurable backbones, loss functions, and augmentation strategies.
+
+Trains a Siamese Network with configurable components.
 
 **Arguments**
-- `--epochs / -e`: Number of training epochs (default: `1`)  
-- `--backbone / -b`: Backbone architecture (default: `resnet50`)  
-- `--augmentation / -a`: Number of augmentations per sample (default: `100`)  
-- `--loss / -l`: Loss function name (default: `Contrastiveloss`)  
-- `--model_name / -n`: Prefix for saved model and logs (default: `shark_v1`)  
-- `--transform_train / -tt`: Transform type for training (default: `transform_data_aug`)  
-- `--transform_val / -tv`: Transform type for validation (default: `test`)  
+
+* `--epochs / -e` – number of training epochs (default: `1`)
+* `--backbone / -b` – CNN backbone architecture (default: `resnet50`)
+* `--augmentation / -a` – number of augmentations per sample (default: `100`)
+* `--loss / -l` – loss function (default: `ContrastiveLoss`)
+* `--model_name / -n` – prefix for saved models/logs (default: `shark_v1`)
+* `--transform_train / -tt` – transformation pipeline for training (default: `transform_data_aug`)
+* `--transform_val / -tv` – transformation pipeline for validation (default: `test`)
 
 **Outputs**
-- Trained model checkpoint saved in `pretrained_model/model_<model_name>.pth`.  
-- Training logs saved in `logs/log_<model_name>.log`.  
+
+* Model checkpoint: `pretrained_model/model_<model_name>.pth`
+* Training log: `logs/log_<model_name>.log`
 
 **Example**
+
 ```bash
-python train_model.py -e 10 -b resnet50 -a 100 -l Contrastiveloss -n shark_v1
+python train_model.py -e 10 -b resnet50 -a 100 -l ContrastiveLoss -n shark_v1
 ```
 
 ---
 
 ### `model_to_onnx.py`
-Export a trained Siamese model to ONNX format and compare PyTorch vs ONNX inference.
+
+Exports a trained model to **ONNX** and optionally compares PyTorch vs. ONNX inference.
 
 **Arguments**
-- `--model_path / -m`: Path to pretrained PyTorch model (default: `model_1.pth`)  
-- `--onnx_path / -o`: Path to save/load ONNX model (default: `model_1.onnx`)  
-- `--comparaison_torch_onnx / -b`: Run full comparison loop (default: `False`)  
+
+* `--model_path / -m` – path to PyTorch checkpoint (default: `model_1.pth`)
+* `--onnx_path / -o` – path to save/load ONNX model (default: `model_1.onnx`)
+* `--comparaison_torch_onnx / -b` – run inference comparison (default: `False`)
 
 **Outputs**
-- ONNX model exported to `pretrained_model/<onnx_file>.onnx`.  
-- Optional speed comparison logs (PyTorch vs ONNX) printed to console.  
+
+* ONNX model: `pretrained_model/<onnx_file>.onnx`
+* Optional runtime comparison logs.
 
 **Example**
+
 ```bash
 python model_to_onnx.py -m model_1.pth -o model_1.onnx -b True
 ```
 
 ---
 
-## Demo and Notebooks
-These are provided for experimentation and demonstrations:
-- **demo create annotation.py**: sample run of annotation preparation.  
-- **demo train model.py**: quick training with toy configuration.  
-- **demo prediction img.py**: inference on sample image pairs.  
-- **eval veri models.ipynb**: notebook for evaluating trained models interactively.  
+## Demo & Notebooks
+
+Interactive resources for experimentation:
+
+* **`demo_create_annotation.py`** – end-to-end annotation preparation example.
+* **`demo_train_model.py`** – quick training demo with modular configs.
+* **`demo_prediction_img.py`** – inference on sample image pairs.
+* **`eval_veri_models.ipynb`** – notebook for evaluating trained models (e.g., on bird datasets).
 
 ---
 
-## Installation and Configuration
+## Installation & Setup
 
-To get started:
+To use this repository:
 
-1. Clone the repository to your workspace.  
-2. Create and activate a Python virtual environment (conda or venv recommended).  
-3. Install the required dependencies listed in `requirements.txt`.  
+1. Clone it locally.
+2. Create and activate a Python virtual environment.
+3. Install dependencies from `requirements.txt`.
 
-All paths for datasets, annotations, models, and logs are centralized in `config.py`.  
-If your directory structure differs, adjust the values in this file accordingly.
+All dataset, model, and log paths are centralized in `config.py`.
+Update values if your directory structure differs.
+
+---
+
+## Workflow Overview
+
+1. **Prepare annotations** → `create_annotation.py`
+2. **Train the model** → `train_model.py`
+3. **Export to ONNX** → `model_to_onnx.py`
+4. **Run demos or notebooks** for testing and evaluation.
 
 ---
 
-## Usage Overview
-
-1. Prepare annotations → `create_annotation.py` (outputs CSV in `data/preprocessed_annotations/`)  
-2. Train the model → `train_model.py` (outputs model in `pretrained_model/`, logs in `logs/`)  
-3. Export and compare with ONNX → `model_to_onnx.py` (outputs `.onnx` in `pretrained_model/`)  
-4. Use demo scripts or notebooks for quick testing.  
-
----
