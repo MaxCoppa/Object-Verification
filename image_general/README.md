@@ -1,13 +1,13 @@
 # Image General
 
-The **`image_general`** submodule provides a set of abstractions for managing, preprocessing, and pairing images in an **object verification pipeline**.  
+The **`image_general`** module provides a set of abstractions for managing, preprocessing, and pairing images in an **object verification pipeline**.  
 It builds the foundation for preparing annotated images, creating training/evaluation pairs, and running model predictions.
 
 ---
 
 ## Overview
 
-This submodule introduces four main components:
+This module introduces four main components:
 
 - **`ImagePreprocessor`**  
   Handles annotation parsing, preprocessing setup, device management, and optional model integration.
@@ -26,7 +26,7 @@ This submodule introduces four main components:
 ## Key Features
 
 - **Flexible preprocessing**: Centralized through `ImagePreprocessor`, with support for transforms, cropping, and device selection.  
-- **Annotation integration**: Works directly with CSV-based annotations from the `dataset_annotation_preparation` submodule.  
+- **Annotation integration**: Works directly with CSV-based annotations from the `dataset_annotation_preparation` module.  
 - **Pair and single-image handling**: Unified API for managing both individual images and verification pairs.  
 - **Metadata access**: Provides ID, timestamp, and folder information for traceability.  
 - **Visualization**: Quick utilities for displaying transformed or paired images.
@@ -45,6 +45,6 @@ This submodule introduces four main components:
 
 ## Integration Notes
 
-- Designed for compatibility with datasets prepared by the **`dataset_preloader`** and **`dataset_annotation_preparation`** submodules.  
+- Designed for compatibility with datasets prepared by the **`dataset_preloader`** and **`dataset_annotation_preparation`** modules.  
 - Provides the low-level image handling building blocks used by higher-level training and evaluation modules.  
 - Can be extended with additional preprocessing or image comparison strategies.

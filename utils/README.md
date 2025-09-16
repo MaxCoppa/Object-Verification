@@ -1,6 +1,7 @@
-# utils
+# Utils  
 
-The **`utils`** module centralizes support functionality for the project, providing reusable tools for image handling, model evaluation, configuration, and ONNX export.
+The utils module provides a collection of reusable components that support the object verification pipeline.  
+It centralizes functionality for image preprocessing, model evaluation, configuration management, and ONNX export, ensuring consistency and reducing code duplication across the project.  
 
 ---
 

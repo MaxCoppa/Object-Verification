@@ -1,5 +1,5 @@
 """
-The aim of this submodule is to create prepare and create dataset annotations
+The aim of this module is to create prepare and create dataset annotations
 con
 """
 

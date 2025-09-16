@@ -1,6 +1,6 @@
 # Image Utils
 
-The **`image_utils`** submodule provides core utilities for image handling in the object verification pipeline.  
+The **`image_utils`** module provides core utilities for image handling in the object verification pipeline.  
 It covers **loading, preprocessing, augmentation, visualization, and path management**, ensuring consistency across training and evaluation.
 
 ---

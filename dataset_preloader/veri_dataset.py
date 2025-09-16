@@ -20,7 +20,6 @@ class VeriImageDataset(Dataset):
     Args:
         annotations_file (str): Path to the CSV file containing image paths and metadata.
         correct_pair_ratio (float): Probability of sampling a positive pair in triplet mode. Default is 0.5.
-        img_dir (str): Optional base directory for images.
         train (bool): Whether to load training data (True) or testing data (False).
         transform (callable): Optional torchvision transform to apply to images.
         file_type (str): Type of image file ("jpg", "png", etc.).
@@ -32,7 +31,6 @@ class VeriImageDataset(Dataset):
         self,
         annotations_file,
         correct_pair_ratio: int = 0.5,
-        img_dir=None,
         train=True,
         transform=None,
         file_type="jpg",
@@ -41,7 +39,6 @@ class VeriImageDataset(Dataset):
     ):
 
         self.img_labels = pd.read_csv(annotations_file)
-        self.img_dir = img_dir
         self.train = train
 
         self.img_labels = self.img_labels[self.img_labels["train"] == int(self.train)]

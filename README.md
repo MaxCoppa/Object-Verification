@@ -22,17 +22,17 @@ This repository provides a **complete training and deployment pipeline** for obj
 ## Repository Structure  
 
 ### Core Modules  
-- **`dataset_annotation_preparation/`** – preprocess raw annotations into structured CSVs with train/test splits and augmentations.  
-- **`dataset_preloader/`** – PyTorch `Dataset` classes for loading image pairs or triplets.  
-- **`image_general/`** – utilities for preprocessing, augmentation, and transformations.  
-- **`training_evaluation/`** – training loops, evaluation routines, logging, and metric computation.  
-- **`utils/`** – helper functions for metrics, model management, and ONNX export.  
-- **`veri_models/`** – Siamese architectures with configurable backbones.  
+- `dataset_annotation_preparation/` – preprocess raw annotations into structured CSVs with train/test splits and augmentations.  
+- `dataset_preloader/` – PyTorch `Dataset` classes for loading image pairs or triplets.  
+- `image_general/` – utilities for preprocessing, augmentation, and transformations.  
+- `training_evaluation/` – training loops, evaluation routines, logging, and metric computation.  
+- `utils/` – helper functions for metrics, model management, and ONNX export.  
+- `veri_models/` – Siamese architectures with configurable backbones.  
 
 ### Supporting Directories  
-- **`data/`** – raw annotations, processed CSVs, and datasets.  
-- **`logs/`** – training logs and evaluation metrics.  
-- **`pretrained_model/`** – saved model checkpoints and exported ONNX files.  
+- `data/` – raw annotations, processed CSVs, and datasets.  
+- `logs/` – training logs and evaluation metrics.  
+- `pretrained_model/` – saved model checkpoints and exported ONNX files.  
 
 ---
 
@@ -112,10 +112,10 @@ python model_to_onnx.py -m model_1.pth -o model_1.onnx -b True
 
 Interactive resources for experimentation:
 
-* **`demo_create_annotation.py`** – end-to-end annotation preparation example.
-* **`demo_train_model.py`** – quick training demo with modular configs.
-* **`demo_prediction_img.py`** – inference on sample image pairs.
-* **`eval_veri_models.ipynb`** – notebook for evaluating trained models (e.g., on bird datasets).
+* `demo_create_annotation.py` – end-to-end annotation preparation example.
+* `demo_train_model.py` – quick training demo with modular configs.
+* `demo_prediction_img.py` – inference on sample image pairs.
+* `eval_veri_models.ipynb` – notebook for evaluating trained models (e.g., on bird datasets).
 
 ---
 

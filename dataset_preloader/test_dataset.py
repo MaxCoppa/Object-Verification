@@ -19,7 +19,6 @@ class VeriImageDatasetTest(Dataset):
 
     Args:
         annotations_file (str): Path to the CSV file with image paths and labels.
-        img_dir (str): Optional directory where images are stored.
         transform (callable): Torchvision transform(s) to apply to the images.
         file_type (str): Type of image file (e.g., "jpg", "png").
         crop_type (str or None): Optional crop strategy to apply to the images.
@@ -28,14 +27,12 @@ class VeriImageDatasetTest(Dataset):
     def __init__(
         self,
         annotations_file,
-        img_dir=None,
         transform=None,
         file_type="jpg",
         crop_type=None,
     ):
 
         self.img_labels = pd.read_csv(annotations_file)
-        self.img_dir = img_dir
 
         self.transform = transform
 

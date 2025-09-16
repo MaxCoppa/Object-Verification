@@ -1,6 +1,6 @@
 # Dataset Annotation Preparation
 
-This submodule provides tools to preprocess raw annotations into a structured format suitable for **object verification with Siamese networks**.  
+This module provides tools to preprocess raw annotations into a structured format suitable for **object verification with Siamese networks**.  
 It converts raw image/object metadata into paired or triplet datasets that can be directly used for training, validation, and evaluation.
 
 ---
@@ -57,7 +57,7 @@ All paths are validated, and invalid entries are automatically removed.
 
 ## Integration Notes
 
-- The output format is **fully compatible** with the datasets in the `dataset_preloader` submodule.  
+- The output format is **fully compatible** with the datasets in the `dataset_preloader` module.  
 - Annotations must reference images stored in the designated dataset folder.  
 - Augmentation and error pair/triplet settings allow customization of dataset diversity.  
 
